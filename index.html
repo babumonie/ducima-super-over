@@ -59,11 +59,33 @@ input,textarea,select,button{font-family:inherit}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
 .toast.show{opacity:1}
+
+/* API KEY MODAL */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:1.5rem}
+.modal-box{background:#111936;border:1.5px solid #F59E0B;border-radius:16px;padding:2rem;width:100%;max-width:400px}
+.modal-box h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.modal-box p{font-size:13px;color:#64748B;line-height:1.6;margin-bottom:1.25rem}
+.modal-box input{width:100%;background:#0d1430;border:1.5px solid #1e2a4a;border-radius:8px;color:#fff;font-size:14px;padding:12px 14px;outline:none;margin-bottom:1rem;letter-spacing:.5px}
+.modal-box input:focus{border-color:#F59E0B}
+.modal-box .hint{font-size:11px;color:#334155;margin-top:.5rem;line-height:1.6}
 </style>
 </head>
 <body>
 
-<!-- ═══ LANDING ═══ -->
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal-box">
+    <div style="font-size:11px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:.5rem">HOST ONLY</div>
+    <h2>Enter your API key</h2>
+    <p>This is only needed to run the AI judge. It stays in memory and is never saved or stored anywhere.</p>
+    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+    <button class="btn btn-amber" id="btn-save-api" style="margin-bottom:.5rem">Unlock AI judge</button>
+    <button class="btn btn-ghost" id="btn-skip-api" style="display:block;width:100%;text-align:center;padding:10px">I'm a team member — skip this</button>
+    <p class="hint">Don't have a key? Only the host needs one. Team members just tap "Skip" and submit their entry normally.</p>
+  </div>
+</div>
+
+<!-- LANDING -->
 <div id="pg-landing" class="page active">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center">
     <div style="width:80px;height:80px;background:#F59E0B;border-radius:50%;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center">
@@ -84,7 +106,7 @@ input,textarea,select,button{font-family:inherit}
   </div>
 </div>
 
-<!-- ═══ SUBMIT ═══ -->
+<!-- SUBMIT -->
 <div id="pg-submit" class="page">
   <div class="header">
     <div>
@@ -99,58 +121,31 @@ input,textarea,select,button{font-family:inherit}
         <div style="font-size:10px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:8px">THE CHALLENGE</div>
         <div style="font-size:14px;color:#CBD5E1;line-height:1.7">India just won the 2025 T20 World Cup. Surya Kumar Yadav has lifted the trophy. You are the social media manager for Team India. Write a post for Instagram, a Tweet, and a WhatsApp message to fans celebrating the win — AND name who YOU think was the key contributor to India winning. Make it dramatic. Make it viral.</div>
       </div>
-
-      <div class="field">
-        <label>Your name</label>
-        <input type="text" id="sub-name" placeholder="e.g. Priya S." maxlength="30">
-      </div>
+      <div class="field"><label>Your name</label><input type="text" id="sub-name" placeholder="e.g. Priya S." maxlength="30"></div>
       <div class="field">
         <label>Your role</label>
         <select id="sub-role">
           <option value="">Select your role...</option>
-          <option>Developer</option>
-          <option>Designer</option>
-          <option>Project Manager</option>
-          <option>QA Tester</option>
-          <option>Content / Copywriter</option>
-          <option>PPC / Paid Social</option>
-          <option>SEO</option>
-          <option>GA4 / Dashboard Analyst</option>
+          <option>Developer</option><option>Designer</option><option>Project Manager</option>
+          <option>QA Tester</option><option>Content / Copywriter</option>
+          <option>PPC / Paid Social</option><option>SEO</option><option>GA4 / Dashboard Analyst</option>
         </select>
       </div>
       <div class="field">
         <label>AI tool used</label>
         <select id="sub-tool">
           <option value="">Which AI tool did you use?</option>
-          <option>ChatGPT</option>
-          <option>Claude</option>
-          <option>Canva AI</option>
+          <option>ChatGPT</option><option>Claude</option><option>Canva AI</option>
         </select>
       </div>
-      <div class="field">
-        <label>Key contributor — who was India's hero?</label>
-        <input type="text" id="sub-hero" placeholder="e.g. Bumrah, Rohit, Virat, SKY..." maxlength="50">
-      </div>
-
+      <div class="field"><label>Key contributor — who was India's hero?</label><input type="text" id="sub-hero" placeholder="e.g. Bumrah, Rohit, Virat, SKY..." maxlength="50"></div>
       <div class="divider"></div>
-
-      <div class="field">
-        <label>Instagram post</label>
-        <textarea id="sub-ig" placeholder="Write your Instagram caption celebrating India's win..."></textarea>
-      </div>
-      <div class="field">
-        <label>Tweet / X post</label>
-        <textarea id="sub-tweet" placeholder="Write your tweet (max 280 chars)..." maxlength="280"></textarea>
-      </div>
-      <div class="field">
-        <label>WhatsApp message</label>
-        <textarea id="sub-wa" placeholder="Write your WhatsApp fan message..."></textarea>
-      </div>
-
+      <div class="field"><label>Instagram post</label><textarea id="sub-ig" placeholder="Write your Instagram caption celebrating India's win..."></textarea></div>
+      <div class="field"><label>Tweet / X post</label><textarea id="sub-tweet" placeholder="Write your tweet (max 280 chars)..." maxlength="280"></textarea></div>
+      <div class="field"><label>WhatsApp message</label><textarea id="sub-wa" placeholder="Write your WhatsApp fan message..."></textarea></div>
       <button class="btn btn-amber" id="btn-do-submit">Submit my entry &#8594;</button>
       <p style="font-size:11px;color:#334155;text-align:center;margin-top:.75rem">Your entry is visible to the whole Ducima team</p>
     </div>
-
     <div id="submit-success" style="display:none;text-align:center;padding:3rem 1rem">
       <div style="width:72px;height:72px;background:#10B981;border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:36px">&#10003;</div>
       <h2 style="font-size:22px;font-weight:800;margin-bottom:10px">Entry submitted!</h2>
@@ -160,7 +155,7 @@ input,textarea,select,button{font-family:inherit}
   </div>
 </div>
 
-<!-- ═══ HOST ═══ -->
+<!-- HOST -->
 <div id="pg-host" class="page">
   <div class="header">
     <div>
@@ -176,13 +171,11 @@ input,textarea,select,button{font-family:inherit}
       <button class="btn-ghost" id="btn-host-back">&#8592;</button>
     </div>
   </div>
-
   <div class="nav">
     <button class="active" id="nav-entries" onclick="hostTab('entries')">Entries</button>
     <button id="nav-vote" onclick="hostTab('vote')">Vote</button>
     <button id="nav-results" onclick="hostTab('results')">Results</button>
   </div>
-
   <div id="tab-entries" class="tab active">
     <div class="stats-row">
       <div class="stat"><div class="val" id="stat-count">0</div><div class="lbl">Entries</div></div>
@@ -193,9 +186,8 @@ input,textarea,select,button{font-family:inherit}
       <div style="font-size:14px;font-weight:700;color:#CBD5E1">Live submissions</div>
       <button class="btn-ghost" id="btn-judge" style="color:#F59E0B;border-color:#F59E0B">Run AI judge &#9658;</button>
     </div>
-    <div id="entries-list"><div class="empty">Waiting for entries...<br>Team opens this file and taps "Submit my entry"</div></div>
+    <div id="entries-list"><div class="empty">Waiting for entries...<br>Team opens this page and taps "Submit my entry"</div></div>
   </div>
-
   <div id="tab-vote" class="tab">
     <div class="cat-tabs">
       <button class="cat-tab active" onclick="voteCat(this,'instagram')">Instagram</button>
@@ -204,7 +196,6 @@ input,textarea,select,button{font-family:inherit}
     </div>
     <div id="vote-list"><div class="empty">Entries will appear here once submitted.</div></div>
   </div>
-
   <div id="tab-results" class="tab">
     <div id="results-area"><div class="empty">Run the AI judge first to see results.</div></div>
   </div>
@@ -214,107 +205,113 @@ input,textarea,select,button{font-family:inherit}
 
 <script>
 var SHEET_URL = 'https://script.google.com/macros/s/AKfycby8yWAUmZYWqsn6wp6_6CyTBg2KTfllF_3k67VXPSBMAxWaA3rLKbBUILroU8KzFyc/exec';
-
+var API_KEY = '';
 var entries = [];
 var pollTimer = null;
-var L = { votes:{instagram:{},tweet:{},whatsapp:{}}, aiScores:{}, aiComments:{}, judged:false };
+var L = {votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:''};
 
-function saveLocal(){ try{ localStorage.setItem('ducima_local', JSON.stringify(L)) }catch(e){} }
-function loadLocal(){ try{ var d=localStorage.getItem('ducima_local'); if(d) L=JSON.parse(d) }catch(e){} }
+function saveLocal(){try{localStorage.setItem('ducima_local',JSON.stringify(L))}catch(e){}}
+function loadLocal(){try{var d=localStorage.getItem('ducima_local');if(d)L=JSON.parse(d)}catch(e){}}
 
 function toast(msg){
   var t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show') },2500);
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},2500);
 }
 
+// ── API KEY MODAL ──
+document.getElementById('btn-save-api').onclick=function(){
+  var key=document.getElementById('api-key-input').value.trim();
+  if(!key||!key.startsWith('sk-ant')){alert('Please enter a valid Anthropic API key starting with sk-ant');return}
+  API_KEY=key;
+  document.getElementById('api-modal').style.display='none';
+  toast('API key saved for this session');
+};
+document.getElementById('btn-skip-api').onclick=function(){
+  document.getElementById('api-modal').style.display='none';
+};
+
+// ── NAVIGATION ──
 function show(id){
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active') });
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.getElementById('pg-'+id).classList.add('active');
-  if(id==='host'){ startHost() }
+  if(id==='host'){startHost()}
 }
 
-document.getElementById('btn-go-submit').onclick   = function(){ show('submit') };
-document.getElementById('btn-go-host').onclick     = function(){ show('host') };
-document.getElementById('btn-submit-back').onclick = function(){ show('landing') };
-document.getElementById('btn-host-back').onclick   = function(){ clearInterval(pollTimer); show('landing') };
-document.getElementById('btn-do-submit').onclick   = function(){ doSubmit() };
-document.getElementById('btn-submit-another').onclick = function(){ resetSubmit() };
-document.getElementById('btn-judge').onclick = function(){ runAIJudge() };
-document.getElementById('btn-demo').onclick  = function(){ loadDemoData() };
-document.getElementById('btn-clear').onclick = function(){ clearAll() };
+document.getElementById('btn-go-submit').onclick=function(){show('submit')};
+document.getElementById('btn-go-host').onclick=function(){show('host')};
+document.getElementById('btn-submit-back').onclick=function(){show('landing')};
+document.getElementById('btn-host-back').onclick=function(){clearInterval(pollTimer);show('landing')};
+document.getElementById('btn-do-submit').onclick=function(){doSubmit()};
+document.getElementById('btn-submit-another').onclick=function(){resetSubmit()};
+document.getElementById('btn-judge').onclick=function(){runAIJudge()};
+document.getElementById('btn-demo').onclick=function(){loadDemoData()};
+document.getElementById('btn-clear').onclick=function(){clearAll()};
 
+// ── HOST ──
 function startHost(){
-  loadLocal();
-  setSyncStatus('loading');
-  fetchEntries();
+  loadLocal();setSyncStatus('loading');fetchEntries();
   clearInterval(pollTimer);
-  pollTimer = setInterval(fetchEntries, 5000);
+  pollTimer=setInterval(fetchEntries,5000);
 }
 
 function setSyncStatus(state){
   var dot=document.getElementById('sync-dot');
   var txt=document.getElementById('sync-status');
-  if(state==='ok'){ dot.className='dot green'; txt.textContent='Live — syncing every 5s' }
-  else if(state==='loading'){ dot.className='dot amber'; txt.textContent='Connecting to sheet...' }
-  else { dot.className='dot red'; txt.textContent='Sheet connection error — check Apps Script deployment' }
+  if(state==='ok'){dot.className='dot green';txt.textContent='Live — syncing every 5s'}
+  else if(state==='loading'){dot.className='dot amber';txt.textContent='Connecting to sheet...'}
+  else{dot.className='dot red';txt.textContent='Sheet connection error'}
 }
 
 function fetchEntries(){
   fetch(SHEET_URL+'?action=getEntries')
-    .then(function(r){ return r.json() })
-    .then(function(data){ entries=data.entries||[]; setSyncStatus('ok'); renderAll(); })
-    .catch(function(){ setSyncStatus('error') });
+    .then(function(r){return r.json()})
+    .then(function(data){entries=data.entries||[];setSyncStatus('ok');renderAll()})
+    .catch(function(){setSyncStatus('error')});
 }
 
+// ── SUBMIT ──
 function doSubmit(){
-  var name  = document.getElementById('sub-name').value.trim();
-  var role  = document.getElementById('sub-role').value;
-  var tool  = document.getElementById('sub-tool').value;
-  var hero  = document.getElementById('sub-hero').value.trim();
-  var ig    = document.getElementById('sub-ig').value.trim();
-  var tweet = document.getElementById('sub-tweet').value.trim();
-  var wa    = document.getElementById('sub-wa').value.trim();
-  if(!name||!role||!tool||!hero||!ig||!tweet||!wa){ alert('Please fill in all fields including your hero pick!'); return }
-
-  var entry={ id:Date.now(), name:name, role:role, tool:tool, hero:hero, instagram:ig, tweet:tweet, whatsapp:wa, time:new Date().toLocaleTimeString() };
+  var name=document.getElementById('sub-name').value.trim();
+  var role=document.getElementById('sub-role').value;
+  var tool=document.getElementById('sub-tool').value;
+  var hero=document.getElementById('sub-hero').value.trim();
+  var ig=document.getElementById('sub-ig').value.trim();
+  var tweet=document.getElementById('sub-tweet').value.trim();
+  var wa=document.getElementById('sub-wa').value.trim();
+  if(!name||!role||!tool||!hero||!ig||!tweet||!wa){alert('Please fill in all fields including your hero pick!');return}
+  var entry={id:Date.now(),name:name,role:role,tool:tool,hero:hero,instagram:ig,tweet:tweet,whatsapp:wa,time:new Date().toLocaleTimeString()};
   var btn=document.getElementById('btn-do-submit');
-  btn.textContent='Submitting...'; btn.disabled=true;
-
-  fetch(SHEET_URL,{ method:'POST', body:JSON.stringify({action:'addEntry',entry:entry}) })
-    .then(function(r){ return r.json() })
+  btn.textContent='Submitting...';btn.disabled=true;
+  fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'addEntry',entry:entry})})
+    .then(function(r){return r.json()})
     .then(function(d){
-      btn.textContent='Submit my entry →'; btn.disabled=false;
-      if(d.success){
-        document.getElementById('submit-form').style.display='none';
-        document.getElementById('submit-success').style.display='block';
-      } else { alert('Something went wrong. Try again.') }
+      btn.textContent='Submit my entry →';btn.disabled=false;
+      if(d.success){document.getElementById('submit-form').style.display='none';document.getElementById('submit-success').style.display='block'}
+      else{alert('Something went wrong. Try again.')}
     })
-    .catch(function(err){ btn.textContent='Submit my entry →'; btn.disabled=false; alert('Error: '+err.message) });
+    .catch(function(err){btn.textContent='Submit my entry →';btn.disabled=false;alert('Error: '+err.message)});
 }
 
 function resetSubmit(){
-  ['sub-name','sub-hero','sub-ig','sub-tweet','sub-wa'].forEach(function(id){ document.getElementById(id).value='' });
+  ['sub-name','sub-hero','sub-ig','sub-tweet','sub-wa'].forEach(function(id){document.getElementById(id).value=''});
   document.getElementById('sub-role').value='';
   document.getElementById('sub-tool').value='';
   document.getElementById('submit-form').style.display='block';
   document.getElementById('submit-success').style.display='none';
 }
 
-function renderAll(){ renderEntries(); renderStats(); }
+// ── RENDER ──
+function renderAll(){renderEntries();renderStats()}
 
 function renderStats(){
   var n=entries.length;
   document.getElementById('stat-count').textContent=n;
-  if(!n){
-    document.getElementById('stat-tools').textContent='–';
-    document.getElementById('stat-hero').textContent='–';
-    return;
-  }
-  var tools={}, heroes={};
+  if(!n){document.getElementById('stat-tools').textContent='–';document.getElementById('stat-hero').textContent='–';return}
+  var tools={},heroes={};
   entries.forEach(function(e){
     tools[e.tool]=(tools[e.tool]||0)+1;
-    if(e.hero){ var h=e.hero.trim(); heroes[h]=(heroes[h]||0)+1 }
+    if(e.hero){var h=e.hero.trim();heroes[h]=(heroes[h]||0)+1}
   });
   document.getElementById('stat-tools').textContent=Object.entries(tools).sort(function(a,b){return b[1]-a[1]})[0][0].split(' ')[0];
   document.getElementById('stat-hero').textContent=Object.entries(heroes).sort(function(a,b){return b[1]-a[1]})[0][0].split(' ')[0];
@@ -322,7 +319,7 @@ function renderStats(){
 
 function renderEntries(){
   var el=document.getElementById('entries-list');
-  if(!entries.length){ el.innerHTML='<div class="empty">Waiting for entries...<br>Team opens this file and taps "Submit my entry"</div>'; return }
+  if(!entries.length){el.innerHTML='<div class="empty">Waiting for entries...<br>Team opens this page and taps "Submit my entry"</div>';return}
   el.innerHTML=entries.map(function(e){
     return '<div class="sub-card">'+
       '<div style="display:flex;justify-content:space-between;margin-bottom:6px">'+
@@ -330,7 +327,7 @@ function renderEntries(){
         '<div style="font-size:12px;color:#64748B">'+e.role+' &middot; <span style="color:#2563EB">'+e.tool+'</span></div></div>'+
         '<div style="font-size:11px;color:#334155">'+e.time+'</div>'+
       '</div>'+
-      '<div style="font-size:11px;font-weight:700;color:#F59E0B;margin-bottom:6px">HERO PICK: <span style="color:#fff;font-weight:800">'+e.hero+'</span></div>'+
+      '<div style="font-size:11px;font-weight:700;color:#F59E0B;margin-bottom:8px">HERO PICK: <span style="color:#fff;font-weight:800">'+e.hero+'</span></div>'+
       '<div class="post-label">INSTAGRAM</div><div class="post-text">'+e.instagram+'</div>'+
       '<div class="post-label">TWEET</div><div class="post-text">'+e.tweet+'</div>'+
       '<div class="post-label">WHATSAPP</div><div class="post-text">'+e.whatsapp+'</div>'+
@@ -338,24 +335,24 @@ function renderEntries(){
   }).join('');
 }
 
+// ── VOTE ──
 function hostTab(name){
-  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active') });
-  document.querySelectorAll('.nav button').forEach(function(b){ b.classList.remove('active') });
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active')});
   document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if(name==='vote') renderVote('instagram');
-  if(name==='results') renderResults();
+  if(name==='vote')renderVote('instagram');
+  if(name==='results')renderResults();
 }
 
 function voteCat(btn,cat){
-  document.querySelectorAll('.cat-tab').forEach(function(b){ b.classList.remove('active') });
-  btn.classList.add('active');
-  renderVote(cat);
+  document.querySelectorAll('.cat-tab').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');renderVote(cat);
 }
 
 function renderVote(cat){
   var el=document.getElementById('vote-list');
-  if(!entries.length){ el.innerHTML='<div class="empty">No entries yet.</div>'; return }
+  if(!entries.length){el.innerHTML='<div class="empty">No entries yet.</div>';return}
   var labels={instagram:'Instagram post',tweet:'Tweet',whatsapp:'WhatsApp message'};
   el.innerHTML=entries.map(function(e){
     var voted=L.votes[cat][e.id];
@@ -369,31 +366,35 @@ function renderVote(cat){
 }
 
 function castVote(cat,id){
-  Object.keys(L.votes[cat]).forEach(function(k){ L.votes[cat][k]=false });
-  L.votes[cat][id]=true;
-  saveLocal(); toast('Vote saved!');
-  renderVote(cat);
+  Object.keys(L.votes[cat]).forEach(function(k){L.votes[cat][k]=false});
+  L.votes[cat][id]=true;saveLocal();toast('Vote saved!');renderVote(cat);
 }
 
+// ── AI JUDGE ──
 async function runAIJudge(){
-  if(!entries.length){ alert('No entries to judge yet!'); return }
+  if(!entries.length){alert('No entries to judge yet!');return}
+  if(!API_KEY){
+    var key=prompt('Enter your Anthropic API key to run the AI judge:');
+    if(!key||!key.startsWith('sk-ant')){alert('Invalid API key.');return}
+    API_KEY=key;
+  }
   var btn=document.getElementById('btn-judge');
-  btn.textContent='Judging...'; btn.disabled=true;
+  btn.textContent='Judging...';btn.disabled=true;
   try{
-    var heroList=entries.map(function(e){ return e.name+' says: '+e.hero }).join(', ');
+    var heroList=entries.map(function(e){return e.name+' says: '+e.hero}).join(', ');
     var prompt=
       'You are a dramatic cricket commentator AND sharp social media expert judging an AI Super Over competition at Ducima, a digital agency in India.\n\n'+
-      'The context: India just won the 2025 T20 World Cup. Surya Kumar Yadav (SKY) lifted the trophy. Each team member used an AI tool to:\n'+
-      '1. Write social posts celebrating the win\n'+
-      '2. Name who THEY think was the key contributor to India winning\n\n'+
-      'Hero picks from the team: '+heroList+'\n\n'+
-      'Score each entry 1-10 for Instagram, Tweet, and WhatsApp based on: virality potential, emotional punch, creativity, and authenticity to the World Cup moment.\n\n'+
+      'Context: India just won the 2025 T20 World Cup. Surya Kumar Yadav (SKY) lifted the trophy.\n\n'+
+      'Each team member used an AI tool to write social posts AND name who they think was the key contributor to India winning.\n\n'+
+      'Hero picks: '+heroList+'\n\n'+
+      'Score each entry 1-10 for Instagram, Tweet, and WhatsApp based on virality, emotional punch, creativity, and authenticity.\n\n'+
       'SUBMISSIONS:\n'+
       entries.map(function(e,i){
         return 'ENTRY '+i+' — '+e.name+' ('+e.role+', used '+e.tool+', hero pick: '+e.hero+')\nInstagram: '+e.instagram+'\nTweet: '+e.tweet+'\nWhatsApp: '+e.whatsapp;
       }).join('\n\n')+
       '\n\nRespond ONLY with valid JSON, no markdown:\n'+
-      '{"hero_debate":"One punchy sentence commenting on the team\'s hero picks — agree or disagree with the consensus","entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,'+
+      '{"hero_debate":"One punchy sentence commenting on the team\'s hero picks — agree or challenge the consensus",'+
+      '"entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,'+
       '"instagram_comment":"One witty sentence specific to this Instagram post",'+
       '"tweet_comment":"One witty sentence specific to this tweet",'+
       '"whatsapp_comment":"One witty sentence specific to this WhatsApp message",'+
@@ -403,31 +404,36 @@ async function runAIJudge(){
 
     var res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':API_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})
     });
     var data=await res.json();
+    if(data.error){throw new Error(data.error.message)}
     var raw=data.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
     var clean=raw.replace(/```json|```/g,'').trim();
     var parsed=JSON.parse(clean);
-
-    L.heroDebate = parsed.hero_debate || '';
+    L.heroDebate=parsed.hero_debate||'';
     parsed.entries.forEach(function(r){
       var entry=entries[r.index];
-      if(!entry) return;
+      if(!entry)return;
       L.aiScores[entry.id]={instagram:r.instagram_score,tweet:r.tweet_score,whatsapp:r.whatsapp_score};
       L.aiComments[entry.id]={instagram:r.instagram_comment,tweet:r.tweet_comment,whatsapp:r.whatsapp_comment,hero:r.hero_comment,overall:r.overall_comment};
     });
-    L.judged=true; saveLocal();
-    btn.textContent='Re-judge &#9658;'; btn.disabled=false;
-    toast('AI judging complete!');
-    hostTab('results');
+    L.judged=true;saveLocal();
+    btn.textContent='Re-judge &#9658;';btn.disabled=false;
+    toast('AI judging complete!');hostTab('results');
   }catch(err){
-    btn.textContent='Run AI judge &#9658;'; btn.disabled=false;
+    btn.textContent='Run AI judge &#9658;';btn.disabled=false;
     alert('Error: '+err.message);
   }
 }
 
+// ── RESULTS ──
 function getScore(id,cat){
   var ai=(L.aiScores[id]||{})[cat]||0;
   var voted=L.votes[cat][id]?true:false;
@@ -436,30 +442,24 @@ function getScore(id,cat){
 
 function renderResults(){
   var el=document.getElementById('results-area');
-  if(!L.judged){ el.innerHTML='<div class="empty">Run the AI judge first.</div>'; return }
+  if(!L.judged){el.innerHTML='<div class="empty">Run the AI judge first.</div>';return}
   var html='';
-
-  // Hero debate box
   if(L.heroDebate){
     html+='<div style="background:#111936;border:1.5px solid #F59E0B;border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.5rem">'+
       '<div style="font-size:10px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:6px">AI VERDICT ON THE HERO DEBATE</div>'+
       '<div style="font-size:14px;color:#CBD5E1;font-style:italic;line-height:1.6">"'+L.heroDebate+'"</div>'+
     '</div>';
   }
-
   var cats=['instagram','tweet','whatsapp'];
   var catLabels={instagram:'Best Instagram post',tweet:'Best Tweet',whatsapp:'Best WhatsApp message'};
   var catColors={instagram:'#E1306C',tweet:'#1DA1F2',whatsapp:'#25D366'};
-
   cats.forEach(function(cat){
     var ranked=entries.map(function(e){
       var s=getScore(e.id,cat);
       return{id:e.id,name:e.name,role:e.role,tool:e.tool,hero:e.hero,ai:s.ai,voted:s.voted,combined:s.combined};
     }).sort(function(a,b){return b.combined-a.combined});
-
     html+='<div style="margin-bottom:2rem">'+
       '<div style="font-size:12px;font-weight:800;color:'+catColors[cat]+';letter-spacing:.8px;margin-bottom:.85rem;text-transform:uppercase">'+catLabels[cat]+'</div>';
-
     ranked.forEach(function(e,i){
       html+='<div class="result-card'+(i===0?' winner':'')+'">'+
         (i<3?'<div class="rank-badge r'+(i+1)+'">'+(i+1)+'</div>':'')+
@@ -476,19 +476,15 @@ function renderResults(){
         '</div>'+
         '<div style="font-size:14px;font-weight:800;color:#F59E0B;margin-bottom:4px">Combined: '+e.combined.toFixed(1)+'/10</div>'+
         '<div class="ai-quote">'+((L.aiComments[e.id]||{})[cat]||'')+'</div>'+
-        (L.aiComments[e.id]&&L.aiComments[e.id].hero?
-          '<div style="font-size:12px;color:#F59E0B;font-style:italic;margin-top:6px;padding:8px 10px;background:#0d1430;border-radius:6px">On their hero pick: '+L.aiComments[e.id].hero+'</div>':'')+
+        (L.aiComments[e.id]&&L.aiComments[e.id].hero?'<div style="font-size:12px;color:#F59E0B;font-style:italic;margin-top:6px;padding:8px 10px;background:#0d1430;border-radius:6px">On their hero pick: '+L.aiComments[e.id].hero+'</div>':'')+
       '</div>';
     });
     html+='</div>';
   });
-
-  // Overall champion
   var overall=entries.map(function(e){
     var avg=['instagram','tweet','whatsapp'].reduce(function(sum,c){return sum+getScore(e.id,c).combined},0)/3;
     return{id:e.id,name:e.name,role:e.role,tool:e.tool,hero:e.hero,avg:avg};
   }).sort(function(a,b){return b.avg-a.avg});
-
   if(overall[0]){
     var c=overall[0];
     html+='<div class="champion-box">'+
@@ -501,12 +497,12 @@ function renderResults(){
       '<div style="font-size:13px;color:#94A3B8;font-style:italic;line-height:1.6">"'+((L.aiComments[c.id]||{}).overall||'')+'"</div>'+
       '<div style="margin-top:1.25rem;font-size:14px;font-weight:700;color:#F59E0B">&#127873; Amazon voucher winner!</div>'+
     '</div>';
-
     html+='<div style="font-size:12px;font-weight:700;color:#64748B;letter-spacing:.8px;margin-bottom:.75rem">FULL LEADERBOARD</div>';
     overall.forEach(function(e,i){
       html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid #1e2a4a">'+
         '<div style="display:flex;align-items:center;gap:12px">'+
-          '<div style="width:28px;height:28px;border-radius:50%;background:'+(i===0?'#F59E0B':i===1?'#94A3B8':i===2?'#cd7c32':'#1e2a4a')+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:'+(i<3?'#000':'#64748B')+';">'+(i+1)+'</div>'+
+          '<div style="width:28px;height:28px;border-radius:50%;background:'+(i===0?'#F59E0B':i===1?'#94A3B8':i===2?'#cd7c32':'#1e2a4a')+
+          ';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:'+(i<3?'#000':'#64748B')+';">'+(i+1)+'</div>'+
           '<div><div style="font-size:14px;font-weight:700">'+e.name+'</div>'+
           '<div style="font-size:11px;color:#64748B">'+e.role+' · hero: '+e.hero+'</div></div>'+
         '</div>'+
@@ -518,12 +514,12 @@ function renderResults(){
 }
 
 function clearAll(){
-  if(!confirm('Delete ALL entries from the sheet? Cannot be undone.')) return;
+  if(!confirm('Delete ALL entries? Cannot be undone.'))return;
   L={votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:''};
   saveLocal();
   fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'clearEntries'})})
-    .then(function(){ fetchEntries() })
-    .catch(function(){ entries=[]; renderAll() });
+    .then(function(){fetchEntries()})
+    .catch(function(){entries=[];renderAll()});
 }
 
 function loadDemoData(){
@@ -531,19 +527,19 @@ function loadDemoData(){
     {id:1001,name:'Priya S.',role:'Content / Copywriter',tool:'Claude',time:'10:12 AM',hero:'Bumrah',
      instagram:'WORLD CHAMPIONS. Surya Kumar Yadav lifts the T20 World Cup and a billion hearts explode at once. This team. This moment. This country. Nothing will ever be the same. #IndiaWins #T20WorldCup2025 #SKY',
      tweet:'SKY lifts the cup. Bumrah breaks the world. India wins the T20 World Cup 2025. I am not okay. #IndiaWins #Champions',
-     whatsapp:'GUYS WE WON THE T20 WORLD CUP!!!! SKY IS LIFTING THE TROPHY RIGHT NOW!!!! I am literally crying tell me you are watching this!!!'},
+     whatsapp:'GUYS WE WON THE T20 WORLD CUP!!!! SKY IS LIFTING THE TROPHY RIGHT NOW!!!! I am literally crying tell me you are watching this!!!!'},
     {id:1002,name:'Rahul M.',role:'Developer',tool:'ChatGPT',time:'10:15 AM',hero:'Rohit Sharma',
      instagram:'Some captains lead teams. Rohit Sharma leads nations. T20 World Cup 2025 — INDIA. SKY holds it high and the whole country rises with him. Jai Hind. #T20WorldCup #IndiaWins',
      tweet:'Rohit planned it. Bumrah executed it. SKY lifted it. India owns it. T20 World Champions 2025. #Champions #IndiaWins',
      whatsapp:'BRO. BRO. INDIA WON. SKY LIFTED THE CUP. Rohit is crying. I am crying. Are you watching this?? INDIA INDIA INDIA'},
     {id:1003,name:'Sneha K.',role:'Designer',tool:'Canva AI',time:'10:18 AM',hero:'Surya Kumar Yadav',
-     instagram:'360 degrees of brilliance. SKY — the man, the myth, the World Cup captain. India 2025 T20 World Champions and no one deserved it more. We believed. We conquered. #SKY #IndiaWins #T20WorldCup2025',
-     tweet:'SKY looked up. SKY lifted the cup. India looked on and wept tears of joy. T20 World Champions 2025. #IndiaWins',
+     instagram:'360 degrees of brilliance. SKY — the man, the myth, the World Cup captain. India 2025 T20 World Champions. We believed. We conquered. #SKY #IndiaWins #T20WorldCup2025',
+     tweet:'SKY looked up. SKY lifted the cup. India wept tears of joy. T20 World Champions 2025. #IndiaWins',
      whatsapp:'Arre yaar!!! SKY ne cup utha liya!!! T20 World Champions!!! Koi dekh raha hai?? Main toh ro rahi hoon!!!'}
   ];
   L.votes={instagram:{1001:true},tweet:{1002:true},whatsapp:{1003:true}};
-  L.aiScores={}; L.aiComments={}; L.judged=false; L.heroDebate='';
-  saveLocal(); renderAll();
+  L.aiScores={};L.aiComments={};L.judged=false;L.heroDebate='';
+  saveLocal();renderAll();
   alert('Demo data loaded! Hit "Run AI judge" to see it in action.');
 }
 
