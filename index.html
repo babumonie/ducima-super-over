@@ -118,7 +118,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
           <option>ChatGPT</option><option>Claude</option><option>Canva AI</option>
         </select>
       </div>
-      <div class="field"><label>Who was Indias key contributor</label><input type="text" id="sub-hero" placeholder="e.g. Bumrah, Rohit, SKY..." maxlength="50" autocomplete="off"></div>
+      <div class="field"><label>Who was India's key contributor?</label><input type="text" id="sub-hero" placeholder="e.g. Bumrah, Rohit, SKY..." maxlength="50" autocomplete="off"></div>
       <div class="divider"></div>
       <div class="field"><label>Instagram post</label><textarea id="sub-ig" placeholder="Write your Instagram caption..."></textarea></div>
       <div class="field"><label>Tweet / X post</label><textarea id="sub-tweet" placeholder="Max 280 chars..." maxlength="280"></textarea></div>
@@ -459,14 +459,14 @@ function runAIJudge(useKey){
   btn.textContent='Judging...';btn.disabled=true;
   try{
     var heroList=entries.map(function(e){return e.name+' says: '+e.hero}).join(', ');
-    var prompt='You are a dramatic cricket commentator judging an AI Super Over at Ducima digital agency in India.\n\nIndia won the 2025 T20 World Cup. SKY lifted the trophy.\n\nHero picks from team: '+heroList+'\n\nScore each entry 1-10 for Instagram, Tweet, WhatsApp on virality, emotion, creativity.\n\nSUBMISSIONS:\n'+
-      entries.map(function(e,i){return 'ENTRY '+i+' - '+e.name+' ('+e.role+', '+e.tool+', hero: '+e.hero+')\nInstagram: '+e.instagram+'\nTweet: '+e.tweet+'\nWhatsApp: '+e.whatsapp}).join('\n\n')+
-      '\n\nJSON only, no markdown:\n{"hero_debate":"one punchy sentence on hero picks","entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,"instagram_comment":"witty sentence","tweet_comment":"witty sentence","whatsapp_comment":"witty sentence","hero_comment":"react to hero pick","overall_comment":"cricket metaphor sentence"}]}';
+    var prompt='Judge this AI Super Over at Ducima. India won 2025 T20 WC. SKY lifted trophy.\n\nHero picks: '+heroList+'\n\nScore 1-10 each: Instagram, Tweet, WhatsApp. Be brief.\n\nENTRIES:\n'+
+      entries.map(function(e,i){return i+':'+e.name+'('+e.tool+',hero:'+e.hero+')\nIG:'+e.instagram.substring(0,100)+'\nTW:'+e.tweet.substring(0,100)+'\nWA:'+e.whatsapp.substring(0,100)}).join('\n')+
+      '\n\nReturn ONLY this JSON, keep all strings under 20 words:\n{"hero_debate":"one sentence","entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,"instagram_comment":"short","tweet_comment":"short","whatsapp_comment":"short","hero_comment":"short","overall_comment":"short"}]}';
 
     fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':useKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:prompt}]})
     })
     .then(function(r){return r.json()})
     .then(function(data){
