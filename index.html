@@ -6,7 +6,7 @@
 <title>Ducima AI Super Over</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#0a0f2c;color:#fff;min-height:100vh;font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#0a0f2c;color:#fff;min-height:100vh}
 input,textarea,select,button{font-family:inherit;font-size:16px}
 .page{display:none;min-height:100vh;background:#0a0f2c}
 .page.active{display:block}
@@ -30,7 +30,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
 .vote-btn{display:block;width:100%;padding:12px;border-radius:10px;border:1.5px solid #1e2a4a;background:transparent;color:#94A3B8;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;text-align:center}
 .vote-btn.voted{background:#F59E0B;border-color:#F59E0B;color:#000}
 .cat-tabs{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
-.cat-tab{padding:9px 18px;border-radius:20px;border:1.5px solid #1e2a4a;background:transparent;color:#64748B;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none}
+.cat-tab{padding:9px 18px;border-radius:20px;border:1.5px solid #1e2a4a;background:transparent;color:#64748B;font-size:14px;font-weight:700;cursor:pointer}
 .cat-tab.active{background:#2563EB;border-color:#2563EB;color:#fff}
 .nav{display:flex;background:#111936;border-bottom:1px solid #1e2a4a}
 .nav button{flex:1;padding:14px 8px;background:transparent;border:none;border-bottom:2px solid transparent;color:#64748B;font-size:14px;font-weight:700;cursor:pointer}
@@ -59,7 +59,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1}
-.voting-locked{background:#111936;border:1.5px solid #334155;border-radius:12px;padding:2rem;text-align:center}
+.vote-count{font-size:11px;color:#64748B;margin-top:4px;text-align:center}
 </style>
 </head>
 <body>
@@ -129,7 +129,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
       <div style="width:72px;height:72px;background:#10B981;border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:36px">&#10003;</div>
       <h2 style="font-size:22px;font-weight:800;margin-bottom:10px">Entry submitted!</h2>
       <p style="color:#64748B;font-size:15px;margin-bottom:.5rem;line-height:1.6">The AI judge is watching.</p>
-      <p style="color:#64748B;font-size:14px;margin-bottom:2rem;line-height:1.6">When the host opens voting,<br>come back and tap "Vote for the best".</p>
+      <p style="color:#94A3B8;font-size:14px;margin-bottom:2rem">When the host opens voting, tap "Vote for the best" on the home screen.</p>
       <button class="btn-ghost" id="btn-submit-another" style="margin:0 auto;display:block">Submit another entry</button>
     </div>
   </div>
@@ -145,16 +145,21 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
     <button class="btn-ghost" id="btn-vote-back">&#8592; Back</button>
   </div>
   <div class="inner">
-    <div id="vote-locked" class="voting-locked">
+    <div id="vote-locked" style="background:#111936;border:1.5px solid #334155;border-radius:12px;padding:2rem;text-align:center">
       <div style="font-size:32px;margin-bottom:1rem">&#128274;</div>
       <div style="font-size:17px;font-weight:700;margin-bottom:8px">Voting not open yet</div>
-      <p style="font-size:14px;color:#64748B;line-height:1.6">The host will open voting once everyone has submitted. Check back in a moment.</p>
+      <p style="font-size:14px;color:#64748B;line-height:1.6">The host will open voting once everyone has submitted.</p>
+      <button class="btn btn-ghost" style="margin-top:1.25rem;width:auto;padding:10px 24px" onclick="loadVotePage()">Refresh</button>
     </div>
     <div id="vote-open" style="display:none">
-      <div class="cat-tabs" id="vote-cat-tabs">
-        <button class="cat-tab active" onclick="voteCat('instagram')">Instagram</button>
-        <button class="cat-tab" onclick="voteCat('tweet')">Tweet</button>
-        <button class="cat-tab" onclick="voteCat('whatsapp')">WhatsApp</button>
+      <div style="margin-bottom:.5rem">
+        <div style="font-size:12px;color:#64748B;margin-bottom:.5rem">Your name (so we save your vote)</div>
+        <input type="text" id="voter-name" placeholder="Enter your name..." style="width:100%;background:#0d1430;border:1.5px solid #1e2a4a;border-radius:10px;color:#fff;font-size:16px;padding:12px 14px;outline:none;margin-bottom:1rem">
+      </div>
+      <div class="cat-tabs">
+        <button class="cat-tab active" onclick="voteCat(this,'instagram')">Instagram</button>
+        <button class="cat-tab" onclick="voteCat(this,'tweet')">Tweet</button>
+        <button class="cat-tab" onclick="voteCat(this,'whatsapp')">WhatsApp</button>
       </div>
       <div id="vote-list"><div class="empty">Loading entries...</div></div>
     </div>
@@ -186,7 +191,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
   <div id="tab-entries" class="tab active">
     <div class="stats-row">
       <div class="stat"><div class="val" id="stat-count">0</div><div class="lbl">Entries</div></div>
-      <div class="stat"><div class="val" id="stat-tools">-</div><div class="lbl">Top tool</div></div>
+      <div class="stat"><div class="val" id="stat-votes">0</div><div class="lbl">Votes cast</div></div>
       <div class="stat"><div class="val" id="stat-hero">-</div><div class="lbl">Top hero</div></div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">
@@ -199,10 +204,13 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
   <div id="tab-control" class="tab">
     <div style="background:#111936;border:1px solid #1e2a4a;border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem">
       <div style="font-size:13px;color:#64748B;margin-bottom:.5rem">VOTING STATUS</div>
-      <div style="font-size:22px;font-weight:800;margin-bottom:1rem" id="voting-status-text">Voting is CLOSED</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:1rem" id="voting-status-text">Checking...</div>
       <button class="btn btn-green" id="btn-toggle-vote" style="max-width:280px;margin:0 auto">Open voting for the team</button>
     </div>
-    <p style="font-size:13px;color:#64748B;text-align:center;line-height:1.7">When you open voting, the team sees entries and can vote on their phones. Close it when everyone has voted.</p>
+    <div style="background:#111936;border:1px solid #1e2a4a;border-radius:14px;padding:1.25rem;margin-top:1rem">
+      <div style="font-size:12px;font-weight:700;color:#64748B;letter-spacing:.8px;margin-bottom:.75rem">VOTES SO FAR</div>
+      <div id="vote-summary"><div class="empty" style="padding:1rem">No votes yet.</div></div>
+    </div>
   </div>
 
   <div id="tab-results" class="tab">
@@ -213,16 +221,17 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
 <div class="toast" id="toast"></div>
 
 <script>
-var SHEET_URL='https://script.google.com/macros/s/AKfycby8yWAUmZYWqsn6wp6_6CyTBg2KTfllF_3k67VXPSBMAxWaA3rLKbBUILroU8KzFyc/exec';
+var SHEET_URL='https://script.google.com/macros/s/AKfycbxt-Ii2hJyS6UH8rUZGHJYxRMCtRssovWVftRUo16dBzum-GdG56yowgtnuX7Nd3yY/exec';
 var API_KEY='';
 var entries=[];
+var sheetVotes={instagram:{},tweet:{},whatsapp:{}};
 var pollTimer=null;
 var currentVoteCat='instagram';
 var votingOpen=false;
-var L={votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:'',votingOpen:false};
+var aiResults={scores:{},comments:{},heroDebate:'',judged:false};
 
-function saveLocal(){try{localStorage.setItem('ducima_v5',JSON.stringify(L))}catch(e){}}
-function loadLocal(){try{var d=localStorage.getItem('ducima_v5');if(d)L=JSON.parse(d);votingOpen=L.votingOpen||false}catch(e){}}
+function saveLocal(){try{localStorage.setItem('ducima_v6',JSON.stringify(aiResults))}catch(e){}}
+function loadLocal(){try{var d=localStorage.getItem('ducima_v6');if(d)aiResults=JSON.parse(d)}catch(e){}}
 
 function toast(msg){
   var t=document.getElementById('toast');
@@ -245,31 +254,35 @@ document.getElementById('btn-vote-back').onclick=function(){show('landing')};
 document.getElementById('btn-host-back').onclick=function(){clearInterval(pollTimer);show('landing')};
 document.getElementById('btn-do-submit').onclick=function(){doSubmit()};
 document.getElementById('btn-submit-another').onclick=function(){resetSubmit()};
-document.getElementById('btn-judge').onclick=function(){
-  if(!entries.length){alert('No entries to judge yet!');return}
-  var key=API_KEY;
-  if(!key){
-    key=prompt('Enter your Anthropic API key (starts with sk-ant):');
-    if(!key){return}
-    if(!key.startsWith('sk-ant')){alert('Invalid key. Must start with sk-ant');return}
-    API_KEY=key;
-  }
-  runAIJudge(key);
-};
+document.getElementById('btn-judge').onclick=function(){promptAndJudge()};
 document.getElementById('btn-demo').onclick=function(){loadDemoData()};
 document.getElementById('btn-clear').onclick=function(){clearAll()};
 document.getElementById('btn-toggle-vote').onclick=function(){toggleVoting()};
 
 function startHost(){
   loadLocal();
-if(window.location.search.indexOf('vote=open')>-1){
-  votingOpen=true;
-  L.votingOpen=true;
-  show('vote');
-}setSyncStatus('loading');fetchEntries();
+  setSyncStatus('loading');
+  fetchAll();
   clearInterval(pollTimer);
-  pollTimer=setInterval(fetchEntries,5000);
-  updateVotingUI();
+  pollTimer=setInterval(fetchAll,5000);
+}
+
+function fetchAll(){
+  // Fetch entries
+  fetch(SHEET_URL+'?action=getEntries')
+    .then(function(r){return r.json()})
+    .then(function(d){entries=d.entries||[];renderEntries();renderStats()})
+    .catch(function(){setSyncStatus('error')});
+  // Fetch votes
+  fetch(SHEET_URL+'?action=getVotes')
+    .then(function(r){return r.json()})
+    .then(function(d){sheetVotes=d.votes||{instagram:{},tweet:{},whatsapp:{}};renderVoteSummary();setSyncStatus('ok')})
+    .catch(function(){});
+  // Fetch voting status
+  fetch(SHEET_URL+'?action=getStatus')
+    .then(function(r){return r.json()})
+    .then(function(d){votingOpen=d.votingOpen||false;updateVotingUI()})
+    .catch(function(){});
 }
 
 function setSyncStatus(state){
@@ -281,16 +294,21 @@ function setSyncStatus(state){
 }
 
 function toggleVoting(){
-  votingOpen=!votingOpen;
-  L.votingOpen=votingOpen;
-  saveLocal();
-  updateVotingUI();
-  toast(votingOpen?'Voting is now OPEN':'Voting is now CLOSED');
+  var newState=!votingOpen;
+  fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'setVotingOpen',open:newState})})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      votingOpen=d.votingOpen;
+      updateVotingUI();
+      toast(votingOpen?'Voting is now OPEN':'Voting is now CLOSED');
+    })
+    .catch(function(){alert('Could not update voting status.')});
 }
 
 function updateVotingUI(){
   var btn=document.getElementById('btn-toggle-vote');
   var statusText=document.getElementById('voting-status-text');
+  if(!statusText)return;
   if(votingOpen){
     statusText.textContent='Voting is OPEN';
     statusText.style.color='#10B981';
@@ -304,30 +322,53 @@ function updateVotingUI(){
   }
 }
 
+function renderVoteSummary(){
+  var el=document.getElementById('vote-summary');
+  if(!el)return;
+  var cats=['instagram','tweet','whatsapp'];
+  var total=0;
+  var html='';
+  cats.forEach(function(cat){
+    var votes=sheetVotes[cat]||{};
+    var count=Object.values(votes).reduce(function(s,v){return s+(v>0?v:0)},0);
+    total+=count;
+    html+='<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid #1e2a4a">';
+    html+='<div style="font-size:14px;color:#CBD5E1;text-transform:capitalize">'+cat+'</div>';
+    html+='<div style="font-size:14px;font-weight:700;color:#F59E0B">'+count+' vote'+(count!==1?'s':'')+'</div></div>';
+  });
+  if(!html){el.innerHTML='<div class="empty" style="padding:1rem">No votes yet.</div>';return}
+  el.innerHTML=html+'<div style="display:flex;justify-content:space-between;padding:.75rem 0;margin-top:4px"><div style="font-size:14px;font-weight:700;color:#CBD5E1">Total</div><div style="font-size:16px;font-weight:800;color:#F59E0B">'+total+'</div></div>';
+  document.getElementById('stat-votes').textContent=total;
+}
+
 function loadVotePage(){
-  fetch(SHEET_URL+'?action=getEntries')
+  document.getElementById('vote-locked').style.display='block';
+  document.getElementById('vote-open').style.display='none';
+  // Check if voting is open from sheet
+  fetch(SHEET_URL+'?action=getStatus')
     .then(function(r){return r.json()})
-    .then(function(data){
-      entries=data.entries||[];
-      loadLocal();
-      if(votingOpen){
-        document.getElementById('vote-locked').style.display='none';
-        document.getElementById('vote-open').style.display='block';
-        renderVoteList('instagram');
-      } else {
-        document.getElementById('vote-locked').style.display='block';
-        document.getElementById('vote-open').style.display='none';
+    .then(function(d){
+      if(d.votingOpen){
+        // Also load entries
+        return fetch(SHEET_URL+'?action=getEntries')
+          .then(function(r){return r.json()})
+          .then(function(ed){
+            entries=ed.entries||[];
+            document.getElementById('vote-locked').style.display='none';
+            document.getElementById('vote-open').style.display='block';
+            renderVoteList('instagram');
+          });
       }
     })
     .catch(function(){
-      document.getElementById('vote-locked').innerHTML='<div style="text-align:center;padding:2rem"><p style="color:#EF4444;font-size:14px">Could not connect. Please check your connection and try again.</p></div>';
+      document.getElementById('vote-locked').innerHTML='<div style="text-align:center;padding:2rem"><p style="color:#EF4444;font-size:14px">Could not connect. Check your connection.</p><button class="btn btn-ghost" style="margin-top:1rem;width:auto;padding:10px 24px" onclick="loadVotePage()">Try again</button></div>';
     });
 }
 
-function voteCat(cat){
+function voteCat(btn,cat){
   currentVoteCat=cat;
-  document.querySelectorAll('#vote-cat-tabs .cat-tab').forEach(function(b){b.classList.remove('active')});
-  event.target.classList.add('active');
+  document.querySelectorAll('#pg-vote .cat-tab').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
   renderVoteList(cat);
 }
 
@@ -335,10 +376,14 @@ function renderVoteList(cat){
   var el=document.getElementById('vote-list');
   if(!entries.length){el.innerHTML='<div class="empty">No entries yet.</div>';return}
   var labels={instagram:'Instagram post',tweet:'Tweet',whatsapp:'WhatsApp message'};
+  // Get this person's previously cast vote from localStorage
+  var myVotes={};
+  try{var mv=localStorage.getItem('my_votes');if(mv)myVotes=JSON.parse(mv)}catch(e){}
   var html='';
   entries.forEach(function(e){
-    var voted=L.votes[cat][e.id];
+    var voted=myVotes[cat]===String(e.id);
     var eid=String(e.id);
+    var vcount=(sheetVotes[cat]||{})[eid]||0;
     html+='<div class="sub-card">';
     html+='<div style="font-size:15px;font-weight:700">'+e.name+'</div>';
     html+='<div style="font-size:11px;color:#F59E0B;font-weight:700;margin-bottom:8px">Hero: '+e.hero+'</div>';
@@ -349,29 +394,32 @@ function renderVoteList(cat){
     } else {
       html+='<button class="vote-btn" data-cat="'+cat+'" data-id="'+eid+'">Vote for this</button>';
     }
+    if(vcount>0){html+='<div class="vote-count">'+vcount+' vote'+(vcount!==1?'s':'')+'</div>'}
     html+='</div>';
   });
   el.innerHTML=html;
   el.querySelectorAll('.vote-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
-      castVote(this.dataset.cat, this.dataset.id);
+      var c=this.dataset.cat;
+      var id=this.dataset.id;
+      castVote(c,id);
     });
   });
 }
 
 function castVote(cat,id){
-  Object.keys(L.votes[cat]).forEach(function(k){L.votes[cat][k]=false});
-  L.votes[cat][id]=true;
-  saveLocal();
-  toast('Vote saved!');
-  renderVoteList(cat);
-}
-
-function fetchEntries(){
-  fetch(SHEET_URL+'?action=getEntries')
+  var voterName=document.getElementById('voter-name').value.trim();
+  if(!voterName){alert('Please enter your name first so we can save your vote!');document.getElementById('voter-name').focus();return}
+  // Save locally immediately for instant UI feedback
+  var myVotes={};
+  try{var mv=localStorage.getItem('my_votes');if(mv)myVotes=JSON.parse(mv)}catch(e){}
+  myVotes[cat]=id;
+  try{localStorage.setItem('my_votes',JSON.stringify(myVotes))}catch(e){}
+  // Send to sheet
+  fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'castVote',vote:{voter:voterName,category:cat,entryId:id}})})
     .then(function(r){return r.json()})
-    .then(function(data){entries=data.entries||[];setSyncStatus('ok');renderAll()})
-    .catch(function(){setSyncStatus('error')});
+    .then(function(){toast('Vote saved!');renderVoteList(cat)})
+    .catch(function(){toast('Vote saved locally');renderVoteList(cat)});
 }
 
 function doSubmit(){
@@ -400,25 +448,19 @@ function doSubmit(){
 
 function resetSubmit(){
   ['sub-name','sub-hero','sub-ig','sub-tweet','sub-wa'].forEach(function(id){document.getElementById(id).value=''});
-  document.getElementById('sub-role').value='';
-  document.getElementById('sub-tool').value='';
+  document.getElementById('sub-role').value='';document.getElementById('sub-tool').value='';
   document.getElementById('submit-form').style.display='block';
   document.getElementById('submit-success').style.display='none';
 }
 
-function renderAll(){renderEntries();renderStats()}
-
 function renderStats(){
   var n=entries.length;
   document.getElementById('stat-count').textContent=n;
-  if(!n){document.getElementById('stat-tools').textContent='-';document.getElementById('stat-hero').textContent='-';return}
-  var tools={},heroes={};
-  entries.forEach(function(e){
-    tools[e.tool]=(tools[e.tool]||0)+1;
-    if(e.hero){var h=e.hero.trim();heroes[h]=(heroes[h]||0)+1}
-  });
-  document.getElementById('stat-tools').textContent=Object.entries(tools).sort(function(a,b){return b[1]-a[1]})[0][0].split(' ')[0];
-  document.getElementById('stat-hero').textContent=Object.entries(heroes).sort(function(a,b){return b[1]-a[1]})[0][0].split(' ')[0];
+  if(!n){document.getElementById('stat-hero').textContent='-';return}
+  var heroes={};
+  entries.forEach(function(e){if(e.hero){var h=e.hero.trim();heroes[h]=(heroes[h]||0)+1}});
+  var topHero=Object.entries(heroes).sort(function(a,b){return b[1]-a[1]});
+  document.getElementById('stat-hero').textContent=topHero.length?topHero[0][0].split(' ')[0]:'-';
 }
 
 function renderEntries(){
@@ -449,63 +491,101 @@ function hostTab(name){
 }
 
 function getScore(id,cat){
-  var ai=(L.aiScores[id]||{})[cat]||0;
-  var voted=L.votes[cat][id]?true:false;
-  return{ai:ai,voted:voted,combined:(ai*0.5)+(voted?5:0)};
+  var ai=(aiResults.scores[id]||{})[cat]||0;
+  var votes=(sheetVotes[cat]||{})[String(id)]||0;
+  var totalVotes=Object.values(sheetVotes[cat]||{}).reduce(function(s,v){return s+v},0);
+  var peerScore=totalVotes>0?Math.round((votes/totalVotes)*10):0;
+  return{ai:ai,votes:votes,peerScore:peerScore,combined:(ai*0.5)+(peerScore*0.5)};
 }
 
-function runAIJudge(useKey){
-  var btn=document.getElementById('btn-judge');
-  btn.textContent='Judging...';btn.disabled=true;
-  try{
-    var heroList=entries.map(function(e){return e.name+' says: '+e.hero}).join(', ');
-    var prompt='Judge this AI Super Over at Ducima. India won 2025 T20 WC. SKY lifted trophy.\n\nHero picks: '+heroList+'\n\nScore 1-10 each: Instagram, Tweet, WhatsApp. Be brief.\n\nENTRIES:\n'+
-      entries.map(function(e,i){return i+':'+e.name+'('+e.tool+',hero:'+e.hero+')\nIG:'+e.instagram.substring(0,100)+'\nTW:'+e.tweet.substring(0,100)+'\nWA:'+e.whatsapp.substring(0,100)}).join('\n')+
-      '\n\nReturn ONLY this JSON, keep all strings under 20 words:\n{"hero_debate":"one sentence","entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,"instagram_comment":"short","tweet_comment":"short","whatsapp_comment":"short","hero_comment":"short","overall_comment":"short"}]}';
+function promptAndJudge(){
+  if(!entries.length){alert('No entries to judge yet!');return}
+  var key=API_KEY;
+  if(!key){
+    key=prompt('Enter your Anthropic API key (starts with sk-ant):');
+    if(!key)return;
+    if(!key.startsWith('sk-ant')){alert('Invalid key');return}
+    API_KEY=key;
+  }
+  // Also fetch latest votes before judging
+  fetch(SHEET_URL+'?action=getVotes')
+    .then(function(r){return r.json()})
+    .then(function(d){
+      sheetVotes=d.votes||{instagram:{},tweet:{},whatsapp:{}};
+      judgeOneByOne(key,0);
+    })
+    .catch(function(){judgeOneByOne(key,0)});
+}
 
+function judgeOneByOne(key,index){
+  var btn=document.getElementById('btn-judge');
+  if(index===0){
+    aiResults={scores:{},comments:{},heroDebate:'',judged:false};
+    btn.disabled=true;
+  }
+  if(index>=entries.length){
+    // All done — now get hero debate
+    var heroList=entries.map(function(e){return e.name+': '+e.hero}).join(', ');
+    var debatePrompt='Team India just won T20 WC 2025. Hero picks: '+heroList+'. Give one dramatic punchy sentence reacting to these hero picks. JSON only: {"hero_debate":"your sentence"}';
     fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':useKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,messages:[{role:'user',content:prompt}]})
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,messages:[{role:'user',content:debatePrompt}]})
     })
     .then(function(r){return r.json()})
-    .then(function(data){
-      if(data.error){throw new Error(data.error.message)}
-      var raw=data.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
-      var clean=raw.replace(/```json|```/g,'').trim();
-      var start=clean.indexOf('{');
-      var end=clean.lastIndexOf('}');
-      if(start===-1||end===-1){throw new Error('No JSON found in response')}
-      var parsed=JSON.parse(clean.substring(start,end+1));
-      L.heroDebate=parsed.hero_debate||'';
-      parsed.entries.forEach(function(r){
-        var e=entries[r.index];if(!e)return;
-        L.aiScores[e.id]={instagram:r.instagram_score,tweet:r.tweet_score,whatsapp:r.whatsapp_score};
-        L.aiComments[e.id]={instagram:r.instagram_comment,tweet:r.tweet_comment,whatsapp:r.whatsapp_comment,hero:r.hero_comment,overall:r.overall_comment};
-      });
-      L.judged=true;saveLocal();
-      btn.textContent='Re-judge ►';btn.disabled=false;
+    .then(function(d){
+      try{
+        var raw=d.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
+        var p=JSON.parse(raw.replace(/```json|```/g,'').trim());
+        aiResults.heroDebate=p.hero_debate||'';
+      }catch(e){}
+      aiResults.judged=true;
+      saveLocal();
+      btn.textContent='Re-judge \u25ba';btn.disabled=false;
       toast('AI judging complete!');
       hostTab('results');
     })
-    .catch(function(err){
-      btn.textContent='Run AI judge ►';btn.disabled=false;
-      alert('Error: '+err.message);
+    .catch(function(){
+      aiResults.judged=true;saveLocal();
+      btn.textContent='Re-judge \u25ba';btn.disabled=false;
+      toast('AI judging complete!');
+      hostTab('results');
     });
-  }catch(err){
-    btn.textContent='Run AI judge ►';btn.disabled=false;
-    alert('Error: '+err.message);
+    return;
   }
+  var e=entries[index];
+  btn.textContent='Judging '+e.name+'... ('+(index+1)+'/'+entries.length+')';
+  var p='Score this entry for an AI Super Over competition at Ducima digital agency. India won 2025 T20 WC. SKY lifted the trophy.\n\nEntry by: '+e.name+' ('+e.role+', used '+e.tool+', hero pick: '+e.hero+')\nInstagram: '+e.instagram+'\nTweet: '+e.tweet+'\nWhatsApp: '+e.whatsapp+'\n\nScore 1-10 each. Be witty with cricket metaphors. Keep comments under 15 words each.\nJSON only: {"instagram_score":8,"tweet_score":7,"whatsapp_score":9,"instagram_comment":"short witty comment","tweet_comment":"short witty comment","whatsapp_comment":"short witty comment","overall_comment":"dramatic cricket metaphor","hero_comment":"react to hero pick briefly"}';
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:p}]})
+  })
+  .then(function(r){return r.json()})
+  .then(function(d){
+    if(d.error){throw new Error(d.error.message)}
+    var raw=d.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
+    var start=raw.indexOf('{');var end=raw.lastIndexOf('}');
+    var parsed=JSON.parse(raw.substring(start,end+1));
+    aiResults.scores[e.id]={instagram:parsed.instagram_score,tweet:parsed.tweet_score,whatsapp:parsed.whatsapp_score};
+    aiResults.comments[e.id]={instagram:parsed.instagram_comment,tweet:parsed.tweet_comment,whatsapp:parsed.whatsapp_comment,overall:parsed.overall_comment,hero:parsed.hero_comment};
+    judgeOneByOne(key,index+1);
+  })
+  .catch(function(err){
+    aiResults.scores[e.id]={instagram:5,tweet:5,whatsapp:5};
+    aiResults.comments[e.id]={instagram:'Could not judge',tweet:'Could not judge',whatsapp:'Could not judge',overall:'',hero:''};
+    judgeOneByOne(key,index+1);
+  });
 }
 
 function renderResults(){
   var el=document.getElementById('results-area');
-  if(!L.judged){el.innerHTML='<div class="empty">Run the AI judge first.</div>';return}
+  if(!aiResults.judged){el.innerHTML='<div class="empty">Run the AI judge first.</div>';return}
   var html='';
-  if(L.heroDebate){
+  if(aiResults.heroDebate){
     html+='<div style="background:#111936;border:1.5px solid #F59E0B;border-radius:12px;padding:1rem;margin-bottom:1.5rem">';
     html+='<div style="font-size:10px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:6px">AI VERDICT ON THE HERO DEBATE</div>';
-    html+='<div style="font-size:14px;color:#CBD5E1;font-style:italic;line-height:1.6">"'+L.heroDebate+'"</div></div>';
+    html+='<div style="font-size:14px;color:#CBD5E1;font-style:italic;line-height:1.6">"'+aiResults.heroDebate+'"</div></div>';
   }
   var cats=['instagram','tweet','whatsapp'];
   var catLabels={instagram:'Best Instagram post',tweet:'Best Tweet',whatsapp:'Best WhatsApp'};
@@ -513,7 +593,7 @@ function renderResults(){
   cats.forEach(function(cat){
     var ranked=entries.map(function(e){
       var s=getScore(e.id,cat);
-      return{id:e.id,name:e.name,role:e.role,tool:e.tool,hero:e.hero,ai:s.ai,voted:s.voted,combined:s.combined};
+      return{id:e.id,name:e.name,role:e.role,tool:e.tool,hero:e.hero,ai:s.ai,votes:s.votes,peerScore:s.peerScore,combined:s.combined};
     }).sort(function(a,b){return b.combined-a.combined});
     html+='<div style="margin-bottom:2rem">';
     html+='<div style="font-size:12px;font-weight:800;color:'+catColors[cat]+';letter-spacing:.8px;margin-bottom:.85rem;text-transform:uppercase">'+catLabels[cat]+'</div>';
@@ -528,10 +608,10 @@ function renderResults(){
       html+='<div class="score-bar-wrap"><div class="score-bar" style="width:'+((e.ai/10)*100)+'%;background:#2563EB"></div></div>';
       html+='<div style="font-size:13px;font-weight:700;color:#CBD5E1">'+e.ai+'/10</div></div>';
       html+='<div><div style="font-size:10px;color:#F59E0B;font-weight:700">PEER VOTE (50%)</div>';
-      html+='<div class="score-bar-wrap"><div class="score-bar" style="width:'+(e.voted?100:0)+'%;background:#F59E0B"></div></div>';
-      html+='<div style="font-size:13px;font-weight:700;color:#CBD5E1">'+(e.voted?'Voted &#10003;':'No vote')+'</div></div></div>';
+      html+='<div class="score-bar-wrap"><div class="score-bar" style="width:'+((e.peerScore/10)*100)+'%;background:#F59E0B"></div></div>';
+      html+='<div style="font-size:13px;font-weight:700;color:#CBD5E1">'+e.votes+' vote'+(e.votes!==1?'s':'')+'</div></div></div>';
       html+='<div style="font-size:14px;font-weight:800;color:#F59E0B;margin-bottom:4px">Combined: '+e.combined.toFixed(1)+'/10</div>';
-      var c=L.aiComments[e.id]||{};
+      var c=aiResults.comments[e.id]||{};
       if(c[cat]){html+='<div class="ai-quote">'+c[cat]+'</div>'}
       if(c.hero){html+='<div style="font-size:12px;color:#F59E0B;font-style:italic;margin-top:8px;padding:8px 10px;background:#0d1430;border-radius:8px">On their hero pick: '+c.hero+'</div>'}
       html+='</div>';
@@ -551,7 +631,7 @@ function renderResults(){
     html+='<div style="font-size:13px;color:#64748B;margin-bottom:4px">'+c.role+' &middot; '+c.tool+'</div>';
     html+='<div style="font-size:13px;color:#F59E0B;font-weight:700;margin-bottom:.75rem">Hero: '+c.hero+'</div>';
     html+='<div style="font-size:32px;font-weight:800;color:#F59E0B;margin:.5rem 0">'+c.avg.toFixed(1)+'<span style="font-size:16px;color:#64748B">/10</span></div>';
-    var oc=(L.aiComments[c.id]||{}).overall||'';
+    var oc=(aiResults.comments[c.id]||{}).overall||'';
     if(oc){html+='<div style="font-size:13px;color:#94A3B8;font-style:italic;line-height:1.6;margin-top:.5rem">"'+oc+'"</div>'}
     html+='<div style="margin-top:1.25rem;font-size:15px;font-weight:700;color:#F59E0B">&#127873; Amazon voucher winner!</div></div>';
     html+='<div style="font-size:12px;font-weight:700;color:#64748B;letter-spacing:.8px;margin-bottom:.75rem">FULL LEADERBOARD</div>';
@@ -569,31 +649,32 @@ function renderResults(){
 }
 
 function clearAll(){
-  if(!confirm('Delete ALL entries? Cannot be undone.'))return;
-  L={votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:'',votingOpen:false};
-  votingOpen=false;saveLocal();updateVotingUI();
+  if(!confirm('Delete ALL entries and votes? Cannot be undone.'))return;
+  aiResults={scores:{},comments:{},heroDebate:'',judged:false};
+  sheetVotes={instagram:{},tweet:{},whatsapp:{}};
+  saveLocal();
   fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'clearEntries'})})
-    .then(function(){fetchEntries()}).catch(function(){entries=[];renderAll()});
+    .then(function(){fetchAll()}).catch(function(){});
 }
 
 function loadDemoData(){
   entries=[
     {id:1001,name:'Priya S.',role:'Content / Copywriter',tool:'Claude',time:'10:12 AM',hero:'Bumrah',
-     instagram:'WORLD CHAMPIONS. SKY lifts the T20 World Cup! #IndiaWins #T20WorldCup2025',
-     tweet:'SKY lifts the cup. Bumrah breaks the world. India wins. I am not okay. #IndiaWins',
+     instagram:'WORLD CHAMPIONS. SKY lifts the T20 World Cup! #IndiaWins',
+     tweet:'SKY lifts the cup. Bumrah breaks the world. India wins. #IndiaWins',
      whatsapp:'GUYS WE WON THE T20 WORLD CUP!!!! SKY IS LIFTING THE TROPHY!!!!'},
     {id:1002,name:'Rahul M.',role:'Developer',tool:'ChatGPT',time:'10:15 AM',hero:'Rohit Sharma',
-     instagram:'Rohit planned it. SKY lifted it. India owns it. T20 World Champions 2025.',
-     tweet:'Rohit: mastermind. Bumrah: executioner. SKY: champion. INDIA: WORLD CHAMPIONS.',
+     instagram:'Rohit planned it. SKY lifted it. T20 World Champions 2025.',
+     tweet:'Rohit: mastermind. SKY: champion. INDIA: WORLD CHAMPIONS.',
      whatsapp:'BRO INDIA WON. SKY LIFTED THE CUP. Are you watching this??'},
     {id:1003,name:'Sneha K.',role:'Designer',tool:'Canva AI',time:'10:18 AM',hero:'Surya Kumar Yadav',
-     instagram:'360 degrees of brilliance. SKY — the World Cup captain. India 2025 T20 Champions.',
-     tweet:'SKY looked up. SKY lifted the cup. India wept tears of joy. #IndiaWins',
+     instagram:'360 degrees. SKY — the World Cup captain. India 2025 T20 Champions.',
+     tweet:'SKY looked up. SKY lifted the cup. India wept tears of joy.',
      whatsapp:'Arre yaar!!! SKY ne cup utha liya!!! Main toh ro rahi hoon!!!'}
   ];
-  L.votes={instagram:{},tweet:{},whatsapp:{}};
-  L.aiScores={};L.aiComments={};L.judged=false;L.heroDebate='';
-  saveLocal();renderAll();
+  sheetVotes={instagram:{'1001':3,'1002':1,'1003':2},tweet:{'1001':1,'1002':4,'1003':1},whatsapp:{'1001':2,'1002':2,'1003':2}};
+  aiResults={scores:{},comments:{},heroDebate:'',judged:false};
+  renderEntries();renderStats();renderVoteSummary();
   alert('Demo loaded! Hit Run AI judge to test.');
 }
 
