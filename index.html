@@ -466,13 +466,17 @@ function runAIJudge(useKey){
     fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':useKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:prompt}]})
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,messages:[{role:'user',content:prompt}]})
     })
     .then(function(r){return r.json()})
     .then(function(data){
       if(data.error){throw new Error(data.error.message)}
       var raw=data.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
-      var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      var clean=raw.replace(/```json|```/g,'').trim();
+      var start=clean.indexOf('{');
+      var end=clean.lastIndexOf('}');
+      if(start===-1||end===-1){throw new Error('No JSON found in response')}
+      var parsed=JSON.parse(clean.substring(start,end+1));
       L.heroDebate=parsed.hero_debate||'';
       parsed.entries.forEach(function(r){
         var e=entries[r.index];if(!e)return;
