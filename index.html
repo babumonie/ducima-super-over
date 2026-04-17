@@ -67,7 +67,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
 <!-- LANDING -->
 <div id="pg-landing" class="page active">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center">
-    <div style="width:80px;height:80px;background:#F59E0B;border-radius:50%;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center" id="secret-host" onclick="secretHost()">
+    <div style="width:80px;height:80px;background:#F59E0B;border-radius:50%;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;cursor:pointer" id="secret-host">
       <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
         <circle cx="22" cy="22" r="18" stroke="#fff" stroke-width="2.5"/>
         <path d="M14 22 L20 28 L30 16" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -267,6 +267,8 @@ function secretHost(){
   if(secretTaps>=5){secretTaps=0;show('host');return}
   secretTimer=setTimeout(function(){secretTaps=0},2000);
 }
+document.getElementById('secret-host').addEventListener('click', secretHost);
+document.getElementById('secret-host').addEventListener('touchend', function(e){e.preventDefault();secretHost()});
 loadLocal();
   setSyncStatus('loading');
   fetchAll();
