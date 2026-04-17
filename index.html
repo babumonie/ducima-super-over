@@ -2,62 +2,64 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Ducima AI Super Over</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#0a0f2c;color:#fff;min-height:100vh}
-input,textarea,select,button{font-family:inherit}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#0a0f2c;color:#fff;min-height:100vh;font-size:16px}
+input,textarea,select,button{font-family:inherit;font-size:16px}
 .page{display:none;min-height:100vh;background:#0a0f2c}
 .page.active{display:block}
-.btn{display:block;width:100%;padding:15px;border-radius:10px;border:none;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;text-align:center}
-.btn:hover{opacity:.85}
+.btn{display:block;width:100%;padding:16px;border-radius:12px;border:none;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:14px;text-align:center;-webkit-appearance:none}
+.btn:active{opacity:.8}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn-amber{background:#F59E0B;color:#000}
 .btn-blue{background:#2563EB;color:#fff}
-.btn-ghost{background:transparent;border:1px solid #334155;color:#CBD5E1;padding:8px 14px;width:auto;display:inline-block;border-radius:8px;font-size:13px;cursor:pointer}
-.btn-ghost:hover{background:#1e2a4a}
-.field{margin-bottom:1rem}
-.field label{display:block;font-size:11px;font-weight:700;color:#64748B;margin-bottom:6px;letter-spacing:.8px;text-transform:uppercase}
-.field input,.field select,.field textarea{width:100%;background:#0d1430;border:1.5px solid #1e2a4a;border-radius:8px;color:#fff;font-size:15px;padding:12px 14px;outline:none}
-.field textarea{resize:vertical;min-height:90px;line-height:1.6}
+.btn-green{background:#10B981;color:#fff}
+.btn-ghost{background:transparent;border:1.5px solid #334155;color:#CBD5E1;padding:10px 18px;width:auto;display:inline-block;border-radius:10px;font-size:14px;cursor:pointer}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-size:12px;font-weight:700;color:#64748B;margin-bottom:8px;letter-spacing:.8px;text-transform:uppercase}
+.field input,.field select,.field textarea{width:100%;background:#0d1430;border:1.5px solid #1e2a4a;border-radius:10px;color:#fff;font-size:16px;padding:14px;outline:none;-webkit-appearance:none;appearance:none}
+.field textarea{resize:vertical;min-height:100px;line-height:1.6}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:#2563EB}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
 .field select option{background:#111936;color:#fff}
-.sub-card{background:#0d1430;border:1px solid #1e2a4a;border-radius:10px;padding:1rem;margin-bottom:.85rem}
-.post-label{font-size:10px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:4px;margin-top:10px}
-.post-text{font-size:13px;color:#CBD5E1;line-height:1.6;background:#111936;padding:10px 12px;border-radius:6px;word-break:break-word}
-.vote-btn{padding:7px 16px;border-radius:20px;border:1.5px solid #1e2a4a;background:transparent;color:#94A3B8;font-size:13px;font-weight:700;cursor:pointer;margin-top:10px}
-.vote-btn:hover{border-color:#F59E0B;color:#F59E0B}
+.sub-card{background:#0d1430;border:1px solid #1e2a4a;border-radius:12px;padding:1.1rem;margin-bottom:1rem}
+.post-label{font-size:10px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:5px;margin-top:12px}
+.post-text{font-size:14px;color:#CBD5E1;line-height:1.6;background:#111936;padding:12px;border-radius:8px;word-break:break-word}
+.vote-btn{display:block;width:100%;padding:12px;border-radius:10px;border:1.5px solid #1e2a4a;background:transparent;color:#94A3B8;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;text-align:center}
 .vote-btn.voted{background:#F59E0B;border-color:#F59E0B;color:#000}
-.nav{display:flex;background:#111936;border-bottom:1px solid #1e2a4a}
-.nav button{flex:1;padding:13px 8px;background:transparent;border:none;border-bottom:2px solid transparent;color:#64748B;font-size:13px;font-weight:700;cursor:pointer}
-.nav button.active{color:#F59E0B;border-bottom-color:#F59E0B}
-.tab{display:none;padding:1.25rem;max-width:600px;margin:0 auto}
-.tab.active{display:block}
-.cat-tab{padding:7px 16px;border-radius:20px;border:1.5px solid #1e2a4a;background:transparent;color:#64748B;font-size:13px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.cat-tabs{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.cat-tab{padding:9px 18px;border-radius:20px;border:1.5px solid #1e2a4a;background:transparent;color:#64748B;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none}
 .cat-tab.active{background:#2563EB;border-color:#2563EB;color:#fff}
+.nav{display:flex;background:#111936;border-bottom:1px solid #1e2a4a}
+.nav button{flex:1;padding:14px 8px;background:transparent;border:none;border-bottom:2px solid transparent;color:#64748B;font-size:14px;font-weight:700;cursor:pointer}
+.nav button.active{color:#F59E0B;border-bottom-color:#F59E0B}
+.tab{display:none;padding:1.25rem;max-width:640px;margin:0 auto}
+.tab.active{display:block}
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem}
-.stat{background:#0d1430;border-radius:8px;padding:.85rem;text-align:center}
-.stat .val{font-size:26px;font-weight:800;color:#F59E0B}
-.stat .lbl{font-size:11px;color:#64748B;margin-top:2px}
-.result-card{background:#0d1430;border:1px solid #1e2a4a;border-radius:12px;padding:1.25rem;margin-bottom:1rem;position:relative}
-.result-card.winner{border-color:#F59E0B;border-width:1.5px}
-.rank-badge{position:absolute;top:1rem;right:1rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.stat{background:#0d1430;border-radius:10px;padding:1rem;text-align:center}
+.stat .val{font-size:24px;font-weight:800;color:#F59E0B}
+.stat .lbl{font-size:11px;color:#64748B;margin-top:3px}
+.result-card{background:#0d1430;border:1px solid #1e2a4a;border-radius:14px;padding:1.25rem;margin-bottom:1rem;position:relative}
+.result-card.winner{border-color:#F59E0B;border-width:2px}
+.rank-badge{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
 .r1{background:#F59E0B;color:#000}.r2{background:#94A3B8;color:#000}.r3{background:#cd7c32;color:#fff}
-.score-bar-wrap{background:#1e2a4a;border-radius:4px;height:6px;margin:5px 0 3px;overflow:hidden}
-.score-bar{height:6px;border-radius:4px}
-.ai-quote{font-size:13px;color:#94A3B8;font-style:italic;margin-top:10px;padding:10px 12px;background:#111936;border-radius:6px;border-left:2px solid #F59E0B;line-height:1.6}
+.score-bar-wrap{background:#1e2a4a;border-radius:4px;height:7px;margin:6px 0 4px;overflow:hidden}
+.score-bar{height:7px;border-radius:4px}
+.ai-quote{font-size:13px;color:#94A3B8;font-style:italic;margin-top:10px;padding:10px 12px;background:#111936;border-radius:8px;border-left:3px solid #F59E0B;line-height:1.6}
 .champion-box{border:2px solid #F59E0B;border-radius:16px;padding:2rem;text-align:center;margin-bottom:1.25rem;background:#111936}
-.empty{text-align:center;padding:2rem;color:#334155;font-size:14px;line-height:1.8}
-.header{background:#111936;border-bottom:1px solid #1e2a4a;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.inner{padding:1.25rem;max-width:600px;margin:0 auto}
+.empty{text-align:center;padding:2.5rem 1rem;color:#334155;font-size:15px;line-height:1.8}
+.header{background:#111936;border-bottom:1px solid #1e2a4a;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:10}
+.inner{padding:1.25rem;max-width:640px;margin:0 auto}
 .divider{height:1px;background:#1e2a4a;margin:1.25rem 0}
 .sync-row{display:flex;align-items:center;gap:6px;margin-top:3px}
-.dot{width:8px;height:8px;border-radius:50%;background:#334155}
+.dot{width:9px;height:9px;border-radius:50%;background:#334155;flex-shrink:0}
 .dot.green{background:#10B981}.dot.amber{background:#F59E0B;animation:pulse 1s infinite}.dot.red{background:#EF4444}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1}
+.voting-locked{background:#111936;border:1.5px solid #334155;border-radius:12px;padding:2rem;text-align:center}
 </style>
 </head>
 <body>
@@ -72,12 +74,13 @@ input,textarea,select,button{font-family:inherit}
       </svg>
     </div>
     <div style="font-size:11px;font-weight:700;color:#F59E0B;letter-spacing:1.5px;margin-bottom:1rem">DUCIMA · AI SUPER OVER</div>
-    <h1 style="font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.2">The AI<br>Super Over</h1>
-    <p style="color:#64748B;font-size:15px;margin-bottom:.75rem;max-width:320px;line-height:1.7">India won the 2025 T20 World Cup.<br>SKY lifted the trophy.<br>Now — who was the real hero?</p>
-    <p style="color:#94A3B8;font-size:14px;margin-bottom:2.5rem;max-width:320px;line-height:1.7">Best social post wins.<br>AI judge + peer vote decides.<br>Amazon voucher on the line.</p>
+    <h1 style="font-size:32px;font-weight:800;margin-bottom:10px;line-height:1.2">The AI<br>Super Over</h1>
+    <p style="color:#64748B;font-size:15px;margin-bottom:.75rem;max-width:300px;line-height:1.7">India won the 2025 T20 World Cup.<br>SKY lifted the trophy.</p>
+    <p style="color:#94A3B8;font-size:14px;margin-bottom:2.5rem;max-width:300px;line-height:1.7">Best post wins. AI judge + peer vote.<br>Amazon voucher on the line.</p>
     <div style="width:100%;max-width:320px">
       <button class="btn btn-amber" id="btn-go-submit">Submit my entry</button>
-      <button class="btn btn-blue" id="btn-go-host">Host dashboard</button>
+      <button class="btn btn-blue" id="btn-go-vote">Vote for the best</button>
+      <button class="btn btn-ghost" style="width:100%;display:block;margin-bottom:0;text-align:center" id="btn-go-host">Host dashboard</button>
     </div>
     <p style="color:#1e2a4a;font-size:11px;margin-top:2rem">Built by Ducima · Powered by Claude AI</p>
   </div>
@@ -88,19 +91,17 @@ input,textarea,select,button{font-family:inherit}
   <div class="header">
     <div>
       <div style="font-size:17px;font-weight:800">Your entry</div>
-      <div style="font-size:12px;color:#64748B">T20 World Cup 2025 · India</div>
+      <div style="font-size:12px;color:#64748B">T20 World Cup 2025</div>
     </div>
     <button class="btn-ghost" id="btn-submit-back">&#8592; Back</button>
   </div>
   <div class="inner">
-
-    <!-- SUBMIT FORM -->
     <div id="submit-form">
       <div style="background:#111936;border:1px solid #1e2a4a;border-left:3px solid #F59E0B;border-radius:10px;padding:1rem;margin-bottom:1.25rem">
         <div style="font-size:10px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:8px">THE CHALLENGE</div>
-        <div style="font-size:14px;color:#CBD5E1;line-height:1.7">India just won the 2025 T20 World Cup. Surya Kumar Yadav has lifted the trophy. You are Team India's social media manager. Write a post for Instagram, a Tweet, and a WhatsApp message to fans celebrating the win — AND name who YOU think was the key contributor. Make it dramatic. Make it viral.</div>
+        <div style="font-size:14px;color:#CBD5E1;line-height:1.7">India just won the 2025 T20 World Cup. Surya Kumar Yadav has lifted the trophy. You are Team India's social media manager. Write a post for Instagram, a Tweet, and a WhatsApp message — AND name who YOU think was the key contributor. Make it dramatic. Make it viral.</div>
       </div>
-      <div class="field"><label>Your name</label><input type="text" id="sub-name" placeholder="e.g. Priya S." maxlength="30"></div>
+      <div class="field"><label>Your name</label><input type="text" id="sub-name" placeholder="e.g. Priya S." maxlength="30" autocomplete="off"></div>
       <div class="field">
         <label>Your role</label>
         <select id="sub-role">
@@ -113,39 +114,50 @@ input,textarea,select,button{font-family:inherit}
       <div class="field">
         <label>AI tool used</label>
         <select id="sub-tool">
-          <option value="">Which AI tool did you use?</option>
+          <option value="">Which AI tool?</option>
           <option>ChatGPT</option><option>Claude</option><option>Canva AI</option>
         </select>
       </div>
-      <div class="field"><label>Key contributor — who was India's hero?</label><input type="text" id="sub-hero" placeholder="e.g. Bumrah, Rohit, Virat, SKY..." maxlength="50"></div>
+      <div class="field"><label>Who was India's key contributor?</label><input type="text" id="sub-hero" placeholder="e.g. Bumrah, Rohit, SKY..." maxlength="50" autocomplete="off"></div>
       <div class="divider"></div>
       <div class="field"><label>Instagram post</label><textarea id="sub-ig" placeholder="Write your Instagram caption..."></textarea></div>
-      <div class="field"><label>Tweet / X post</label><textarea id="sub-tweet" placeholder="Write your tweet (max 280 chars)..." maxlength="280"></textarea></div>
-      <div class="field"><label>WhatsApp message</label><textarea id="sub-wa" placeholder="Write your WhatsApp fan message..."></textarea></div>
+      <div class="field"><label>Tweet / X post</label><textarea id="sub-tweet" placeholder="Max 280 chars..." maxlength="280"></textarea></div>
+      <div class="field"><label>WhatsApp message</label><textarea id="sub-wa" placeholder="Write your WhatsApp message..."></textarea></div>
       <button class="btn btn-amber" id="btn-do-submit">Submit my entry &#8594;</button>
-      <p style="font-size:11px;color:#334155;text-align:center;margin-top:.75rem">Your entry is visible to the whole Ducima team</p>
     </div>
-
-    <!-- VOTE AFTER SUBMIT -->
-    <div id="submit-success" style="display:none">
-      <div style="text-align:center;padding:1.25rem 0 1rem">
-        <div style="width:56px;height:56px;background:#10B981;border-radius:50%;margin:0 auto .75rem;display:flex;align-items:center;justify-content:center;font-size:28px">&#10003;</div>
-        <h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Entry submitted!</h2>
-        <p style="color:#64748B;font-size:14px">Now vote for your favourites below.</p>
-      </div>
-
-      <div style="font-size:11px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:.75rem">CAST YOUR VOTE</div>
-      <div style="margin-bottom:1rem">
-        <button class="cat-tab active" id="mvtab-instagram" onclick="memberVoteCat('instagram')">Instagram</button>
-        <button class="cat-tab" id="mvtab-tweet" onclick="memberVoteCat('tweet')">Tweet</button>
-        <button class="cat-tab" id="mvtab-whatsapp" onclick="memberVoteCat('whatsapp')">WhatsApp</button>
-      </div>
-      <div id="member-vote-list"><div class="empty">Loading entries...</div></div>
-      <div style="margin-top:1.25rem;text-align:center">
-        <button class="btn-ghost" id="btn-submit-another">Submit another entry</button>
-      </div>
+    <div id="submit-success" style="display:none;text-align:center;padding:3rem 1rem">
+      <div style="width:72px;height:72px;background:#10B981;border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:36px">&#10003;</div>
+      <h2 style="font-size:22px;font-weight:800;margin-bottom:10px">Entry submitted!</h2>
+      <p style="color:#64748B;font-size:15px;margin-bottom:.5rem;line-height:1.6">The AI judge is watching.</p>
+      <p style="color:#64748B;font-size:14px;margin-bottom:2rem;line-height:1.6">When the host opens voting,<br>come back and tap "Vote for the best".</p>
+      <button class="btn-ghost" id="btn-submit-another" style="margin:0 auto;display:block">Submit another entry</button>
     </div>
+  </div>
+</div>
 
+<!-- VOTE -->
+<div id="pg-vote" class="page">
+  <div class="header">
+    <div>
+      <div style="font-size:17px;font-weight:800">Cast your vote</div>
+      <div style="font-size:12px;color:#64748B">50% of the final score</div>
+    </div>
+    <button class="btn-ghost" id="btn-vote-back">&#8592; Back</button>
+  </div>
+  <div class="inner">
+    <div id="vote-locked" class="voting-locked">
+      <div style="font-size:32px;margin-bottom:1rem">&#128274;</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:8px">Voting not open yet</div>
+      <p style="font-size:14px;color:#64748B;line-height:1.6">The host will open voting once everyone has submitted. Check back in a moment.</p>
+    </div>
+    <div id="vote-open" style="display:none">
+      <div class="cat-tabs" id="vote-cat-tabs">
+        <button class="cat-tab active" onclick="voteCat('instagram')">Instagram</button>
+        <button class="cat-tab" onclick="voteCat('tweet')">Tweet</button>
+        <button class="cat-tab" onclick="voteCat('whatsapp')">WhatsApp</button>
+      </div>
+      <div id="vote-list"><div class="empty">Loading entries...</div></div>
+    </div>
   </div>
 </div>
 
@@ -160,13 +172,14 @@ input,textarea,select,button{font-family:inherit}
       </div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn-ghost" id="btn-demo">Demo data</button>
-      <button class="btn-ghost" id="btn-clear" style="color:#EF4444;border-color:#EF4444">Clear all</button>
+      <button class="btn-ghost" id="btn-demo">Demo</button>
+      <button class="btn-ghost" id="btn-clear" style="color:#EF4444;border-color:#EF4444">Clear</button>
       <button class="btn-ghost" id="btn-host-back">&#8592;</button>
     </div>
   </div>
   <div class="nav">
     <button class="active" id="nav-entries" onclick="hostTab('entries')">Entries</button>
+    <button id="nav-control" onclick="hostTab('control')">Voting</button>
     <button id="nav-results" onclick="hostTab('results')">Results</button>
   </div>
 
@@ -174,13 +187,22 @@ input,textarea,select,button{font-family:inherit}
     <div class="stats-row">
       <div class="stat"><div class="val" id="stat-count">0</div><div class="lbl">Entries</div></div>
       <div class="stat"><div class="val" id="stat-tools">-</div><div class="lbl">Top tool</div></div>
-      <div class="stat"><div class="val" id="stat-hero">-</div><div class="lbl">Top hero pick</div></div>
+      <div class="stat"><div class="val" id="stat-hero">-</div><div class="lbl">Top hero</div></div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">
       <div style="font-size:14px;font-weight:700;color:#CBD5E1">Live submissions</div>
       <button class="btn-ghost" id="btn-judge" style="color:#F59E0B;border-color:#F59E0B">Run AI judge &#9658;</button>
     </div>
-    <div id="entries-list"><div class="empty">Waiting for entries...<br>Team opens this page and taps "Submit my entry"</div></div>
+    <div id="entries-list"><div class="empty">Waiting for entries...</div></div>
+  </div>
+
+  <div id="tab-control" class="tab">
+    <div style="background:#111936;border:1px solid #1e2a4a;border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem">
+      <div style="font-size:13px;color:#64748B;margin-bottom:.5rem">VOTING STATUS</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:1rem" id="voting-status-text">Voting is CLOSED</div>
+      <button class="btn btn-green" id="btn-toggle-vote" style="max-width:280px;margin:0 auto">Open voting for the team</button>
+    </div>
+    <p style="font-size:13px;color:#64748B;text-align:center;line-height:1.7">When you open voting, the team sees entries and can vote on their phones. Close it when everyone has voted.</p>
   </div>
 
   <div id="tab-results" class="tab">
@@ -191,15 +213,16 @@ input,textarea,select,button{font-family:inherit}
 <div class="toast" id="toast"></div>
 
 <script>
-var SHEET_URL = 'https://script.google.com/macros/s/AKfycby8yWAUmZYWqsn6wp6_6CyTBg2KTfllF_3k67VXPSBMAxWaA3rLKbBUILroU8KzFyc/exec';
-var API_KEY = '';
-var entries = [];
-var pollTimer = null;
-var currentMemberVoteCat = 'instagram';
-var L = {votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:''};
+var SHEET_URL='https://script.google.com/macros/s/AKfycby8yWAUmZYWqsn6wp6_6CyTBg2KTfllF_3k67VXPSBMAxWaA3rLKbBUILroU8KzFyc/exec';
+var API_KEY='';
+var entries=[];
+var pollTimer=null;
+var currentVoteCat='instagram';
+var votingOpen=false;
+var L={votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:'',votingOpen:false};
 
-function saveLocal(){try{localStorage.setItem('ducima_local',JSON.stringify(L))}catch(e){}}
-function loadLocal(){try{var d=localStorage.getItem('ducima_local');if(d)L=JSON.parse(d)}catch(e){}}
+function saveLocal(){try{localStorage.setItem('ducima_v5',JSON.stringify(L))}catch(e){}}
+function loadLocal(){try{var d=localStorage.getItem('ducima_v5');if(d)L=JSON.parse(d);votingOpen=L.votingOpen||false}catch(e){}}
 
 function toast(msg){
   var t=document.getElementById('toast');
@@ -211,22 +234,27 @@ function show(id){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.getElementById('pg-'+id).classList.add('active');
   if(id==='host'){startHost()}
+  if(id==='vote'){loadVotePage()}
 }
 
 document.getElementById('btn-go-submit').onclick=function(){show('submit')};
+document.getElementById('btn-go-vote').onclick=function(){show('vote')};
 document.getElementById('btn-go-host').onclick=function(){show('host')};
 document.getElementById('btn-submit-back').onclick=function(){show('landing')};
+document.getElementById('btn-vote-back').onclick=function(){show('landing')};
 document.getElementById('btn-host-back').onclick=function(){clearInterval(pollTimer);show('landing')};
 document.getElementById('btn-do-submit').onclick=function(){doSubmit()};
 document.getElementById('btn-submit-another').onclick=function(){resetSubmit()};
 document.getElementById('btn-judge').onclick=function(){runAIJudge()};
 document.getElementById('btn-demo').onclick=function(){loadDemoData()};
 document.getElementById('btn-clear').onclick=function(){clearAll()};
+document.getElementById('btn-toggle-vote').onclick=function(){toggleVoting()};
 
 function startHost(){
   loadLocal();setSyncStatus('loading');fetchEntries();
   clearInterval(pollTimer);
   pollTimer=setInterval(fetchEntries,5000);
+  updateVotingUI();
 }
 
 function setSyncStatus(state){
@@ -235,6 +263,93 @@ function setSyncStatus(state){
   if(state==='ok'){dot.className='dot green';txt.textContent='Live — syncing every 5s'}
   else if(state==='loading'){dot.className='dot amber';txt.textContent='Connecting...'}
   else{dot.className='dot red';txt.textContent='Connection error'}
+}
+
+function toggleVoting(){
+  votingOpen=!votingOpen;
+  L.votingOpen=votingOpen;
+  saveLocal();
+  updateVotingUI();
+  toast(votingOpen?'Voting is now OPEN':'Voting is now CLOSED');
+}
+
+function updateVotingUI(){
+  var btn=document.getElementById('btn-toggle-vote');
+  var statusText=document.getElementById('voting-status-text');
+  if(votingOpen){
+    statusText.textContent='Voting is OPEN';
+    statusText.style.color='#10B981';
+    btn.textContent='Close voting';
+    btn.style.background='#EF4444';
+  } else {
+    statusText.textContent='Voting is CLOSED';
+    statusText.style.color='#EF4444';
+    btn.textContent='Open voting for the team';
+    btn.style.background='#10B981';
+  }
+}
+
+function loadVotePage(){
+  fetch(SHEET_URL+'?action=getEntries')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      entries=data.entries||[];
+      loadLocal();
+      if(votingOpen){
+        document.getElementById('vote-locked').style.display='none';
+        document.getElementById('vote-open').style.display='block';
+        renderVoteList('instagram');
+      } else {
+        document.getElementById('vote-locked').style.display='block';
+        document.getElementById('vote-open').style.display='none';
+      }
+    })
+    .catch(function(){
+      document.getElementById('vote-locked').innerHTML='<div style="text-align:center;padding:2rem"><p style="color:#EF4444;font-size:14px">Could not connect. Please check your connection and try again.</p></div>';
+    });
+}
+
+function voteCat(cat){
+  currentVoteCat=cat;
+  document.querySelectorAll('#vote-cat-tabs .cat-tab').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  renderVoteList(cat);
+}
+
+function renderVoteList(cat){
+  var el=document.getElementById('vote-list');
+  if(!entries.length){el.innerHTML='<div class="empty">No entries yet.</div>';return}
+  var labels={instagram:'Instagram post',tweet:'Tweet',whatsapp:'WhatsApp message'};
+  var html='';
+  entries.forEach(function(e){
+    var voted=L.votes[cat][e.id];
+    var eid=String(e.id);
+    html+='<div class="sub-card">';
+    html+='<div style="font-size:15px;font-weight:700">'+e.name+'</div>';
+    html+='<div style="font-size:11px;color:#F59E0B;font-weight:700;margin-bottom:8px">Hero: '+e.hero+'</div>';
+    html+='<div class="post-label">'+labels[cat]+'</div>';
+    html+='<div class="post-text">'+e[cat]+'</div>';
+    if(voted){
+      html+='<button class="vote-btn voted" data-cat="'+cat+'" data-id="'+eid+'">&#10003; Voted</button>';
+    } else {
+      html+='<button class="vote-btn" data-cat="'+cat+'" data-id="'+eid+'">Vote for this</button>';
+    }
+    html+='</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.vote-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      castVote(this.dataset.cat, this.dataset.id);
+    });
+  });
+}
+
+function castVote(cat,id){
+  Object.keys(L.votes[cat]).forEach(function(k){L.votes[cat][k]=false});
+  L.votes[cat][id]=true;
+  saveLocal();
+  toast('Vote saved!');
+  renderVoteList(cat);
 }
 
 function fetchEntries(){
@@ -263,63 +378,9 @@ function doSubmit(){
       if(d.success){
         document.getElementById('submit-form').style.display='none';
         document.getElementById('submit-success').style.display='block';
-        fetchEntriesForVote();
       } else {alert('Something went wrong. Try again.')}
     })
     .catch(function(err){btn.textContent='Submit my entry \u2192';btn.disabled=false;alert('Error: '+err.message)});
-}
-
-function fetchEntriesForVote(){
-  fetch(SHEET_URL+'?action=getEntries')
-    .then(function(r){return r.json()})
-    .then(function(data){
-      entries=data.entries||[];
-      renderMemberVote('instagram');
-    })
-    .catch(function(){
-      document.getElementById('member-vote-list').innerHTML='<div class="empty">Could not load entries. Please try refreshing.</div>';
-    });
-}
-
-function memberVoteCat(cat){
-  currentMemberVoteCat=cat;
-  document.querySelectorAll('[id^="mvtab-"]').forEach(function(b){b.classList.remove('active')});
-  document.getElementById('mvtab-'+cat).classList.add('active');
-  renderMemberVote(cat);
-}
-
-function renderMemberVote(cat){
-  var el=document.getElementById('member-vote-list');
-  if(!entries.length){
-    el.innerHTML='<div class="empty">No entries yet — you might be first!</div>';
-    return;
-  }
-  var labels={instagram:'Instagram post',tweet:'Tweet',whatsapp:'WhatsApp message'};
-  var html='';
-  entries.forEach(function(e){
-    var voted=L.votes[cat][e.id];
-    var vid=e.id;
-    html+='<div class="sub-card">';
-    html+='<div style="font-size:15px;font-weight:700">'+e.name+'</div>';
-    html+='<div style="font-size:11px;color:#F59E0B;font-weight:700;margin-bottom:6px">Hero: '+e.hero+'</div>';
-    html+='<div class="post-label">'+labels[cat]+'</div>';
-    html+='<div class="post-text">'+e[cat]+'</div>';
-    if(voted){
-      html+='<button class="vote-btn voted" onclick="memberCastVote(\''+cat+'\',\''+vid+'\')">&#10003; Voted</button>';
-    } else {
-      html+='<button class="vote-btn" onclick="memberCastVote(\''+cat+'\',\''+vid+'\')">Vote for this</button>';
-    }
-    html+='</div>';
-  });
-  el.innerHTML=html;
-}
-
-function memberCastVote(cat,id){
-  Object.keys(L.votes[cat]).forEach(function(k){L.votes[cat][k]=false});
-  L.votes[cat][id]=true;
-  saveLocal();
-  toast('Vote saved!');
-  renderMemberVote(cat);
 }
 
 function resetSubmit(){
@@ -347,7 +408,7 @@ function renderStats(){
 
 function renderEntries(){
   var el=document.getElementById('entries-list');
-  if(!entries.length){el.innerHTML='<div class="empty">Waiting for entries...<br>Team opens this page and taps Submit my entry</div>';return}
+  if(!entries.length){el.innerHTML='<div class="empty">Waiting for entries...</div>';return}
   var html='';
   entries.forEach(function(e){
     html+='<div class="sub-card">';
@@ -389,21 +450,9 @@ async function runAIJudge(){
   btn.textContent='Judging...';btn.disabled=true;
   try{
     var heroList=entries.map(function(e){return e.name+' says: '+e.hero}).join(', ');
-    var prompt='You are a dramatic IPL cricket commentator AND sharp social media expert judging an AI Super Over competition at Ducima, a digital agency in India.\n\n'+
-      'Context: India just won the 2025 T20 World Cup. Surya Kumar Yadav (SKY) lifted the trophy.\n\n'+
-      'Each team member used an AI tool to write social posts AND name who they think was the key contributor.\n\n'+
-      'Hero picks: '+heroList+'\n\n'+
-      'Score each entry 1-10 for Instagram, Tweet, and WhatsApp based on virality, emotional punch, creativity, and authenticity.\n\n'+
-      'SUBMISSIONS:\n'+
-      entries.map(function(e,i){
-        return 'ENTRY '+i+' - '+e.name+' ('+e.role+', used '+e.tool+', hero pick: '+e.hero+')\nInstagram: '+e.instagram+'\nTweet: '+e.tweet+'\nWhatsApp: '+e.whatsapp;
-      }).join('\n\n')+
-      '\n\nRespond ONLY with valid JSON, no markdown:\n'+
-      '{"hero_debate":"One punchy sentence on the team hero picks",'+
-      '"entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,'+
-      '"instagram_comment":"One witty sentence","tweet_comment":"One witty sentence",'+
-      '"whatsapp_comment":"One witty sentence","hero_comment":"React to their hero pick",'+
-      '"overall_comment":"One dramatic cricket metaphor sentence"}]}';
+    var prompt='You are a dramatic cricket commentator judging an AI Super Over at Ducima digital agency in India.\n\nIndia won the 2025 T20 World Cup. SKY lifted the trophy.\n\nHero picks from team: '+heroList+'\n\nScore each entry 1-10 for Instagram, Tweet, WhatsApp on virality, emotion, creativity.\n\nSUBMISSIONS:\n'+
+      entries.map(function(e,i){return 'ENTRY '+i+' - '+e.name+' ('+e.role+', '+e.tool+', hero: '+e.hero+')\nInstagram: '+e.instagram+'\nTweet: '+e.tweet+'\nWhatsApp: '+e.whatsapp}).join('\n\n')+
+      '\n\nJSON only, no markdown:\n{"hero_debate":"one punchy sentence on hero picks","entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,"instagram_comment":"witty sentence","tweet_comment":"witty sentence","whatsapp_comment":"witty sentence","hero_comment":"react to hero pick","overall_comment":"cricket metaphor sentence"}]}';
 
     var res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -416,10 +465,9 @@ async function runAIJudge(){
     var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
     L.heroDebate=parsed.hero_debate||'';
     parsed.entries.forEach(function(r){
-      var entry=entries[r.index];
-      if(!entry)return;
-      L.aiScores[entry.id]={instagram:r.instagram_score,tweet:r.tweet_score,whatsapp:r.whatsapp_score};
-      L.aiComments[entry.id]={instagram:r.instagram_comment,tweet:r.tweet_comment,whatsapp:r.whatsapp_comment,hero:r.hero_comment,overall:r.overall_comment};
+      var e=entries[r.index];if(!e)return;
+      L.aiScores[e.id]={instagram:r.instagram_score,tweet:r.tweet_score,whatsapp:r.whatsapp_score};
+      L.aiComments[e.id]={instagram:r.instagram_comment,tweet:r.tweet_comment,whatsapp:r.whatsapp_comment,hero:r.hero_comment,overall:r.overall_comment};
     });
     L.judged=true;saveLocal();
     btn.textContent='Re-judge &#9658;';btn.disabled=false;
@@ -455,7 +503,7 @@ function renderResults(){
       if(i<3){html+='<div class="rank-badge r'+(i+1)+'">'+(i+1)+'</div>'}
       html+='<div style="font-size:15px;font-weight:800;padding-right:42px;margin-bottom:2px">'+e.name+'</div>';
       html+='<div style="font-size:12px;color:#64748B;margin-bottom:4px">'+e.role+' &middot; '+e.tool+'</div>';
-      html+='<div style="font-size:11px;color:#F59E0B;font-weight:700;margin-bottom:12px">Hero pick: '+e.hero+'</div>';
+      html+='<div style="font-size:11px;color:#F59E0B;font-weight:700;margin-bottom:12px">Hero: '+e.hero+'</div>';
       html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">';
       html+='<div><div style="font-size:10px;color:#2563EB;font-weight:700">AI SCORE (50%)</div>';
       html+='<div class="score-bar-wrap"><div class="score-bar" style="width:'+((e.ai/10)*100)+'%;background:#2563EB"></div></div>';
@@ -464,15 +512,15 @@ function renderResults(){
       html+='<div class="score-bar-wrap"><div class="score-bar" style="width:'+(e.voted?100:0)+'%;background:#F59E0B"></div></div>';
       html+='<div style="font-size:13px;font-weight:700;color:#CBD5E1">'+(e.voted?'Voted &#10003;':'No vote')+'</div></div></div>';
       html+='<div style="font-size:14px;font-weight:800;color:#F59E0B;margin-bottom:4px">Combined: '+e.combined.toFixed(1)+'/10</div>';
-      var comments=L.aiComments[e.id]||{};
-      if(comments[cat]){html+='<div class="ai-quote">'+comments[cat]+'</div>'}
-      if(comments.hero){html+='<div style="font-size:12px;color:#F59E0B;font-style:italic;margin-top:6px;padding:8px;background:#0d1430;border-radius:6px">Hero pick: '+comments.hero+'</div>'}
+      var c=L.aiComments[e.id]||{};
+      if(c[cat]){html+='<div class="ai-quote">'+c[cat]+'</div>'}
+      if(c.hero){html+='<div style="font-size:12px;color:#F59E0B;font-style:italic;margin-top:8px;padding:8px 10px;background:#0d1430;border-radius:8px">On their hero pick: '+c.hero+'</div>'}
       html+='</div>';
     });
     html+='</div>';
   });
   var overall=entries.map(function(e){
-    var avg=['instagram','tweet','whatsapp'].reduce(function(sum,c){return sum+getScore(e.id,c).combined},0)/3;
+    var avg=['instagram','tweet','whatsapp'].reduce(function(s,c){return s+getScore(e.id,c).combined},0)/3;
     return{id:e.id,name:e.name,role:e.role,tool:e.tool,hero:e.hero,avg:avg};
   }).sort(function(a,b){return b.avg-a.avg});
   if(overall[0]){
@@ -482,21 +530,20 @@ function renderResults(){
     html+='<div style="font-size:11px;font-weight:700;color:#F59E0B;letter-spacing:1px;margin-bottom:.5rem">OVERALL CHAMPION</div>';
     html+='<div style="font-size:26px;font-weight:800;margin-bottom:4px">'+c.name+'</div>';
     html+='<div style="font-size:13px;color:#64748B;margin-bottom:4px">'+c.role+' &middot; '+c.tool+'</div>';
-    html+='<div style="font-size:13px;color:#F59E0B;font-weight:700;margin-bottom:.75rem">Hero pick: '+c.hero+'</div>';
+    html+='<div style="font-size:13px;color:#F59E0B;font-weight:700;margin-bottom:.75rem">Hero: '+c.hero+'</div>';
     html+='<div style="font-size:32px;font-weight:800;color:#F59E0B;margin:.5rem 0">'+c.avg.toFixed(1)+'<span style="font-size:16px;color:#64748B">/10</span></div>';
     var oc=(L.aiComments[c.id]||{}).overall||'';
-    if(oc){html+='<div style="font-size:13px;color:#94A3B8;font-style:italic;line-height:1.6">"'+oc+'"</div>'}
-    html+='<div style="margin-top:1.25rem;font-size:14px;font-weight:700;color:#F59E0B">&#127873; Amazon voucher winner!</div></div>';
+    if(oc){html+='<div style="font-size:13px;color:#94A3B8;font-style:italic;line-height:1.6;margin-top:.5rem">"'+oc+'"</div>'}
+    html+='<div style="margin-top:1.25rem;font-size:15px;font-weight:700;color:#F59E0B">&#127873; Amazon voucher winner!</div></div>';
     html+='<div style="font-size:12px;font-weight:700;color:#64748B;letter-spacing:.8px;margin-bottom:.75rem">FULL LEADERBOARD</div>';
     overall.forEach(function(e,i){
-      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid #1e2a4a">';
-      html+='<div style="display:flex;align-items:center;gap:12px">';
       var bg=i===0?'#F59E0B':i===1?'#94A3B8':i===2?'#cd7c32':'#1e2a4a';
-      var fc=i<3?'#000':'#64748B';
-      html+='<div style="width:28px;height:28px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:'+fc+';">'+(i+1)+'</div>';
-      html+='<div><div style="font-size:14px;font-weight:700">'+e.name+'</div>';
-      html+='<div style="font-size:11px;color:#64748B">'+e.role+'</div></div></div>';
-      html+='<div style="font-size:16px;font-weight:800;color:'+(i===0?'#F59E0B':'#CBD5E1')+'">'+e.avg.toFixed(1)+'</div></div>';
+      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;border-bottom:1px solid #1e2a4a">';
+      html+='<div style="display:flex;align-items:center;gap:12px">';
+      html+='<div style="width:30px;height:30px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:'+(i<3?'#000':'#64748B')+';">'+(i+1)+'</div>';
+      html+='<div><div style="font-size:15px;font-weight:700">'+e.name+'</div>';
+      html+='<div style="font-size:12px;color:#64748B">'+e.role+'</div></div></div>';
+      html+='<div style="font-size:17px;font-weight:800;color:'+(i===0?'#F59E0B':'#CBD5E1')+'">'+e.avg.toFixed(1)+'</div></div>';
     });
   }
   el.innerHTML=html;
@@ -504,32 +551,31 @@ function renderResults(){
 
 function clearAll(){
   if(!confirm('Delete ALL entries? Cannot be undone.'))return;
-  L={votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:''};
-  saveLocal();
+  L={votes:{instagram:{},tweet:{},whatsapp:{}},aiScores:{},aiComments:{},judged:false,heroDebate:'',votingOpen:false};
+  votingOpen=false;saveLocal();updateVotingUI();
   fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'clearEntries'})})
-    .then(function(){fetchEntries()})
-    .catch(function(){entries=[];renderAll()});
+    .then(function(){fetchEntries()}).catch(function(){entries=[];renderAll()});
 }
 
 function loadDemoData(){
   entries=[
     {id:1001,name:'Priya S.',role:'Content / Copywriter',tool:'Claude',time:'10:12 AM',hero:'Bumrah',
-     instagram:'WORLD CHAMPIONS. SKY lifts the T20 World Cup and a billion hearts explode. #IndiaWins #T20WorldCup2025',
+     instagram:'WORLD CHAMPIONS. SKY lifts the T20 World Cup! #IndiaWins #T20WorldCup2025',
      tweet:'SKY lifts the cup. Bumrah breaks the world. India wins. I am not okay. #IndiaWins',
      whatsapp:'GUYS WE WON THE T20 WORLD CUP!!!! SKY IS LIFTING THE TROPHY!!!!'},
     {id:1002,name:'Rahul M.',role:'Developer',tool:'ChatGPT',time:'10:15 AM',hero:'Rohit Sharma',
-     instagram:'Rohit planned it. SKY lifted it. India owns it. T20 World Champions 2025. #IndiaWins',
-     tweet:'Rohit: mastermind. Bumrah: executioner. SKY: champion. India: WORLD CHAMPIONS. #T20WC',
+     instagram:'Rohit planned it. SKY lifted it. India owns it. T20 World Champions 2025.',
+     tweet:'Rohit: mastermind. Bumrah: executioner. SKY: champion. INDIA: WORLD CHAMPIONS.',
      whatsapp:'BRO INDIA WON. SKY LIFTED THE CUP. Are you watching this??'},
     {id:1003,name:'Sneha K.',role:'Designer',tool:'Canva AI',time:'10:18 AM',hero:'Surya Kumar Yadav',
-     instagram:'360 degrees of brilliance. SKY — the World Cup captain. India 2025 T20 World Champions. #SKY',
-     tweet:'SKY looked up. SKY lifted the cup. India wept tears of joy. #IndiaWins #T20WorldCup2025',
+     instagram:'360 degrees of brilliance. SKY — the World Cup captain. India 2025 T20 Champions.',
+     tweet:'SKY looked up. SKY lifted the cup. India wept tears of joy. #IndiaWins',
      whatsapp:'Arre yaar!!! SKY ne cup utha liya!!! Main toh ro rahi hoon!!!'}
   ];
   L.votes={instagram:{},tweet:{},whatsapp:{}};
   L.aiScores={};L.aiComments={};L.judged=false;L.heroDebate='';
   saveLocal();renderAll();
-  alert('Demo data loaded! Hit Run AI judge to see it in action.');
+  alert('Demo loaded! Hit Run AI judge to test.');
 }
 
 loadLocal();
