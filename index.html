@@ -245,7 +245,17 @@ document.getElementById('btn-vote-back').onclick=function(){show('landing')};
 document.getElementById('btn-host-back').onclick=function(){clearInterval(pollTimer);show('landing')};
 document.getElementById('btn-do-submit').onclick=function(){doSubmit()};
 document.getElementById('btn-submit-another').onclick=function(){resetSubmit()};
-document.getElementById('btn-judge').onclick=function(){runAIJudge()};
+document.getElementById('btn-judge').onclick=function(){
+  if(!entries.length){alert('No entries to judge yet!');return}
+  var key=API_KEY;
+  if(!key){
+    key=prompt('Enter your Anthropic API key (starts with sk-ant):');
+    if(!key){return}
+    if(!key.startsWith('sk-ant')){alert('Invalid key. Must start with sk-ant');return}
+    API_KEY=key;
+  }
+  runAIJudge(key);
+};
 document.getElementById('btn-demo').onclick=function(){loadDemoData()};
 document.getElementById('btn-clear').onclick=function(){clearAll()};
 document.getElementById('btn-toggle-vote').onclick=function(){toggleVoting()};
@@ -439,13 +449,7 @@ function getScore(id,cat){
   return{ai:ai,voted:voted,combined:(ai*0.5)+(voted?5:0)};
 }
 
-async function runAIJudge(){
-  if(!entries.length){alert('No entries to judge yet!');return}
-  if(!API_KEY){
-    var key=prompt('Enter your Anthropic API key:');
-    if(!key||!key.startsWith('sk-ant')){alert('Invalid API key.');return}
-    API_KEY=key;
-  }
+function runAIJudge(useKey){
   var btn=document.getElementById('btn-judge');
   btn.textContent='Judging...';btn.disabled=true;
   try{
@@ -454,27 +458,33 @@ async function runAIJudge(){
       entries.map(function(e,i){return 'ENTRY '+i+' - '+e.name+' ('+e.role+', '+e.tool+', hero: '+e.hero+')\nInstagram: '+e.instagram+'\nTweet: '+e.tweet+'\nWhatsApp: '+e.whatsapp}).join('\n\n')+
       '\n\nJSON only, no markdown:\n{"hero_debate":"one punchy sentence on hero picks","entries":[{"index":0,"instagram_score":8,"tweet_score":7,"whatsapp_score":9,"instagram_comment":"witty sentence","tweet_comment":"witty sentence","whatsapp_comment":"witty sentence","hero_comment":"react to hero pick","overall_comment":"cricket metaphor sentence"}]}';
 
-    var res=await fetch('https://api.anthropic.com/v1/messages',{
+    fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json','x-api-key':useKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})
+    })
+    .then(function(r){return r.json()})
+    .then(function(data){
+      if(data.error){throw new Error(data.error.message)}
+      var raw=data.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
+      var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      L.heroDebate=parsed.hero_debate||'';
+      parsed.entries.forEach(function(r){
+        var e=entries[r.index];if(!e)return;
+        L.aiScores[e.id]={instagram:r.instagram_score,tweet:r.tweet_score,whatsapp:r.whatsapp_score};
+        L.aiComments[e.id]={instagram:r.instagram_comment,tweet:r.tweet_comment,whatsapp:r.whatsapp_comment,hero:r.hero_comment,overall:r.overall_comment};
+      });
+      L.judged=true;saveLocal();
+      btn.textContent='Re-judge ►';btn.disabled=false;
+      toast('AI judging complete!');
+      hostTab('results');
+    })
+    .catch(function(err){
+      btn.textContent='Run AI judge ►';btn.disabled=false;
+      alert('Error: '+err.message);
     });
-    var data=await res.json();
-    if(data.error){throw new Error(data.error.message)}
-    var raw=data.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text}).join('');
-    var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    L.heroDebate=parsed.hero_debate||'';
-    parsed.entries.forEach(function(r){
-      var e=entries[r.index];if(!e)return;
-      L.aiScores[e.id]={instagram:r.instagram_score,tweet:r.tweet_score,whatsapp:r.whatsapp_score};
-      L.aiComments[e.id]={instagram:r.instagram_comment,tweet:r.tweet_comment,whatsapp:r.whatsapp_comment,hero:r.hero_comment,overall:r.overall_comment};
-    });
-    L.judged=true;saveLocal();
-    btn.textContent='Re-judge &#9658;';btn.disabled=false;
-    toast('AI judging complete!');
-    hostTab('results');
   }catch(err){
-    btn.textContent='Run AI judge &#9658;';btn.disabled=false;
+    btn.textContent='Run AI judge ►';btn.disabled=false;
     alert('Error: '+err.message);
   }
 }
