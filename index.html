@@ -84,7 +84,7 @@ input,textarea,select,button{font-family:inherit;font-size:16px}
       
     </div>
     <p style="color:#1e2a4a;font-size:11px;margin-top:2rem">Built by Ducima · Powered by Claude AI</p>
-    <p style="margin-top:1rem"><a href="#" onclick="hostLogin();return false;" style="color:#1e2a4a;font-size:11px;text-decoration:none">&#9670;</a></p>
+
   </div>
 </div>
 
@@ -251,12 +251,13 @@ function show(id){
 document.getElementById('btn-go-submit').onclick=function(){show('submit')};
 document.getElementById('btn-go-vote').onclick=function(){show('vote')};
 document.getElementById('btn-go-host').onclick=function(){
-  var key=prompt('Enter host API key:');
+  var key=prompt('Enter your Anthropic API key to access host dashboard:');
   if(!key)return;
   if(!key.startsWith('sk-ant')){alert('Invalid key. Hosts only.');return}
   API_KEY=key;
   show('host');
 };
+
 document.getElementById('btn-submit-back').onclick=function(){show('landing')};
 document.getElementById('btn-vote-back').onclick=function(){show('landing')};
 document.getElementById('btn-host-back').onclick=function(){clearInterval(pollTimer);show('landing')};
@@ -268,12 +269,8 @@ document.getElementById('btn-clear').onclick=function(){clearAll()};
 document.getElementById('btn-toggle-vote').onclick=function(){toggleVoting()};
 
 function startHost(){
-  function secretHost(){}
-function hostLogin(){
-  var pwd=prompt('Host password:');
-  if(pwd==='ducima2025'){show('host')}
-}
-document.getElementById('secret-host').addEventListener('click', secretHost);
+  
+
 loadLocal();
   setSyncStatus('loading');
   fetchAll();
