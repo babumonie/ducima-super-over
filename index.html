@@ -260,15 +260,11 @@ document.getElementById('btn-clear').onclick=function(){clearAll()};
 document.getElementById('btn-toggle-vote').onclick=function(){toggleVoting()};
 
 function startHost(){
-  var secretTaps=0;var secretTimer=null;
-function secretHost(){
-  secretTaps++;
-  clearTimeout(secretTimer);
-  if(secretTaps>=5){secretTaps=0;show('host');return}
-  secretTimer=setTimeout(function(){secretTaps=0},2000);
+  function secretHost(){
+  var pwd=prompt('Enter host password:');
+  if(pwd==='ducima2025'){show('host')}
 }
 document.getElementById('secret-host').addEventListener('click', secretHost);
-document.getElementById('secret-host').addEventListener('touchend', function(e){e.preventDefault();secretHost()});
 loadLocal();
   setSyncStatus('loading');
   fetchAll();
