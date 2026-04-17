@@ -261,7 +261,12 @@ document.getElementById('btn-clear').onclick=function(){clearAll()};
 document.getElementById('btn-toggle-vote').onclick=function(){toggleVoting()};
 
 function startHost(){
-  loadLocal();setSyncStatus('loading');fetchEntries();
+  loadLocal();
+if(window.location.search.indexOf('vote=open')>-1){
+  votingOpen=true;
+  L.votingOpen=true;
+  show('vote');
+}setSyncStatus('loading');fetchEntries();
   clearInterval(pollTimer);
   pollTimer=setInterval(fetchEntries,5000);
   updateVotingUI();
